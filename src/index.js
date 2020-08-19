@@ -11,6 +11,7 @@ import {
   DirectionalLightHelper,
   ShaderMaterial,
 } from "three";
+import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
@@ -22,7 +23,9 @@ const modelFolderNames = ['house', 'island', 'knowledge', 'ship', 'tree'];
 const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
-let container, scene, camera, renderer, controls, models;
+let container, scene, camera, renderer, controls, models, gui;
+
+let params;
 
 
 function init() {
@@ -37,11 +40,13 @@ function init() {
   createRenderer();
   createGeometries();
   createControls();
-
+  initGui();
   renderer.setAnimationLoop(() => {
     update();
     render();
   });
+
+  
 }
 
 function loadGLTFs() {
@@ -57,6 +62,16 @@ function loadGLTFs() {
     })
     .catch( (err) => console.error( err ) );
   });
+}
+
+function initGui() {
+  params = {
+    test : 1.0
+  };
+
+  gui = new dat.GUI();
+  document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
+  gui.add(params, 'test', 0.0, 10.0);
 }
 
 function createCamera() {
