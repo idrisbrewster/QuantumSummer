@@ -10,34 +10,49 @@ import {
   DirectionalLight,
   DirectionalLightHelper,
   ShaderMaterial,
+  sRGBEncoding,
+  ACESFilmicToneMapping,
+  PMREMGenerator,
+  AnimationMixer,
+  Vector3
 } from "three";
 import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
 
 import fragmentShader from "./shaders/fragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
-const modelFolderNames = ['house', 'island', 'knowledge', 'ship', 'tree'];
+const modelFolderNames = ['house1', 'island1', 'well1', 'ship1', 'tree1'];
 const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
-
-let container, scene, camera, renderer, controls, models, gui;
-
+const debug = true;
+let container, scene, camera, renderer, controls, models, gui, animations;
+let time;
 let params;
 
 
 function init() {
+  time = 0;
   models = [];
+  animations = [];
+
   container = document.querySelector(".container");
   scene = new Scene();
   scene.background = new Color("skyblue");
-  window.scene = scene;
+  
+  scene.fog
+  if(debug) {
+    window.scene = scene;
+  }
+  
   loadGLTFs();
   createCamera();
   createLights();
   createRenderer();
+  createSkyBox();
   createGeometries();
   createControls();
   initGui();
@@ -45,23 +60,30 @@ function init() {
     update();
     render();
   });
+}
 
-  
+function createSkyBox() {
+  let pmremGenerator = new PMREMGenerator( renderer );
+  pmremGenerator.compileEquirectangularShader();
 }
 
 function loadGLTFs() {
   modelFolderNames.forEach(folderName => {
-    let filePath = `${modelPath}${folderName}/${folderName}.glb`;
+    let filePath = `${modelPath}${folderName}/scene.gltf`;
     GLTFPromiseLoader.load( filePath )
     .then((loadedObject) => {
       let gltf = loadedObject.scene;
       gltf.name = folderName;
       console.log(gltf);
       scene.add(gltf);
-      models.push(gltf);
+      models.push(loadedObject);
+      // let mixer = mixer = new AnimationMixer( object );
+      animations.push(loadedObject);
     })
+
     .catch( (err) => console.error( err ) );
   });
+  window.models = models;
 }
 
 function initGui() {
@@ -71,18 +93,22 @@ function initGui() {
 
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
-  gui.add(params, 'test', 0.0, 10.0);
+  gui.add(params, 'test', 0.0, 100.0);
 }
 
 function createCamera() {
   const aspect = container.clientWidth / container.clientHeight;
   camera = new PerspectiveCamera(35, aspect, 0.1, 1000);
-  camera.position.set(2, 1, 5);
+  if(debug) {
+    window.camera = camera;
+  }
+  
+  camera.position.set(-50, 6, 105);
 }
 
 function createLights() {
   const directionalLight = new DirectionalLight(0xffffff, 5);
-  directionalLight.position.set(5, 5, 10);
+  directionalLight.position.set(-65, 12, 75);
 
   const directionalLightHelper = new DirectionalLightHelper(directionalLight, 5);
 
@@ -92,8 +118,14 @@ function createLights() {
 
 function createRenderer() {
   renderer = new WebGLRenderer({ antialias: true });
+  if(debug) {
+    window.render = renderer;
+  }
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
+  // renderer.outputEncoding = sRGBEncoding;
+  // renderer.toneMapping = ACESFilmicToneMapping;
+  // renderer.toneMappingExposure = 1.0;
   renderer.physicallyCorrectLights = true;
 
   container.appendChild(renderer.domElement);
@@ -119,9 +151,44 @@ function createGeometries() {
 
 function createControls() {
   controls = new OrbitControls(camera, renderer.domElement);
+  controls.target = new Vector3(15, 0, 75);
+  controls.update();
+  if(debug) {
+    window.controls = controls;
+  }
+  /*
+  controls = new PointerLockControls( camera, document.body );
+  let blocker = document.getElementById( 'blocker' );
+  let instructions = document.getElementById( 'instructions' );
+
+  instructions.addEventListener( 'click', () => controls.lock(), false);
+
+  controls.addEventListener( 'lock', () => {
+    instructions.style.display = 'none';
+    blocker.style.display = 'none';
+  } );
+
+  controls.addEventListener( 'unlock', () => {
+    blocker.style.display = 'block';
+    instructions.style.display = '';
+  } );  
+  scene.add(controls.getObject());
+  */
 }
 
-function update() {}
+function toggleAnimations() {
+  for ( var i = 0; i < gltf.animations.length; i ++ ) {
+    var clip = gltf.animations[ i ];
+    var action = mixer.existingAction( clip );
+    action.play();
+    state.playAnimation ? action.play() : action.stop();
+  }
+}
+
+function update() {
+  time += 0.1;
+  // controls.target.z = params.test
+}
 
 function render() {
   renderer.render(scene, camera);
@@ -135,3 +202,5 @@ function onWindowResize() {
   renderer.setSize(container.clientWidth, container.clientHeight);
 }
 window.addEventListener("resize", onWindowResize, false);
+
+

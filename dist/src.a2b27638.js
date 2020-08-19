@@ -39373,6 +39373,128 @@ var MapControls = function (object, domElement) {
 exports.MapControls = MapControls;
 MapControls.prototype = Object.create(_threeModule.EventDispatcher.prototype);
 MapControls.prototype.constructor = MapControls;
+},{"../../../build/three.module.js":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/controls/PointerLockControls.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.PointerLockControls = void 0;
+
+var _threeModule = require("../../../build/three.module.js");
+
+var PointerLockControls = function (camera, domElement) {
+  if (domElement === undefined) {
+    console.warn('THREE.PointerLockControls: The second parameter "domElement" is now mandatory.');
+    domElement = document.body;
+  }
+
+  this.domElement = domElement;
+  this.isLocked = false; // Set to constrain the pitch of the camera
+  // Range is 0 to Math.PI radians
+
+  this.minPolarAngle = 0; // radians
+
+  this.maxPolarAngle = Math.PI; // radians
+  //
+  // internals
+  //
+
+  var scope = this;
+  var changeEvent = {
+    type: 'change'
+  };
+  var lockEvent = {
+    type: 'lock'
+  };
+  var unlockEvent = {
+    type: 'unlock'
+  };
+  var euler = new _threeModule.Euler(0, 0, 0, 'YXZ');
+  var PI_2 = Math.PI / 2;
+  var vec = new _threeModule.Vector3();
+
+  function onMouseMove(event) {
+    if (scope.isLocked === false) return;
+    var movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    var movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+    euler.setFromQuaternion(camera.quaternion);
+    euler.y -= movementX * 0.002;
+    euler.x -= movementY * 0.002;
+    euler.x = Math.max(PI_2 - scope.maxPolarAngle, Math.min(PI_2 - scope.minPolarAngle, euler.x));
+    camera.quaternion.setFromEuler(euler);
+    scope.dispatchEvent(changeEvent);
+  }
+
+  function onPointerlockChange() {
+    if (scope.domElement.ownerDocument.pointerLockElement === scope.domElement) {
+      scope.dispatchEvent(lockEvent);
+      scope.isLocked = true;
+    } else {
+      scope.dispatchEvent(unlockEvent);
+      scope.isLocked = false;
+    }
+  }
+
+  function onPointerlockError() {
+    console.error('THREE.PointerLockControls: Unable to use Pointer Lock API');
+  }
+
+  this.connect = function () {
+    scope.domElement.ownerDocument.addEventListener('mousemove', onMouseMove, false);
+    scope.domElement.ownerDocument.addEventListener('pointerlockchange', onPointerlockChange, false);
+    scope.domElement.ownerDocument.addEventListener('pointerlockerror', onPointerlockError, false);
+  };
+
+  this.disconnect = function () {
+    scope.domElement.ownerDocument.removeEventListener('mousemove', onMouseMove, false);
+    scope.domElement.ownerDocument.removeEventListener('pointerlockchange', onPointerlockChange, false);
+    scope.domElement.ownerDocument.removeEventListener('pointerlockerror', onPointerlockError, false);
+  };
+
+  this.dispose = function () {
+    this.disconnect();
+  };
+
+  this.getObject = function () {
+    // retaining this method for backward compatibility
+    return camera;
+  };
+
+  this.getDirection = function () {
+    var direction = new _threeModule.Vector3(0, 0, -1);
+    return function (v) {
+      return v.copy(direction).applyQuaternion(camera.quaternion);
+    };
+  }();
+
+  this.moveForward = function (distance) {
+    // move forward parallel to the xz-plane
+    // assumes camera.up is y-up
+    vec.setFromMatrixColumn(camera.matrix, 0);
+    vec.crossVectors(camera.up, vec);
+    camera.position.addScaledVector(vec, distance);
+  };
+
+  this.moveRight = function (distance) {
+    vec.setFromMatrixColumn(camera.matrix, 0);
+    camera.position.addScaledVector(vec, distance);
+  };
+
+  this.lock = function () {
+    this.domElement.requestPointerLock();
+  };
+
+  this.unlock = function () {
+    scope.domElement.ownerDocument.exitPointerLock();
+  };
+
+  this.connect();
+};
+
+exports.PointerLockControls = PointerLockControls;
+PointerLockControls.prototype = Object.create(_threeModule.EventDispatcher.prototype);
+PointerLockControls.prototype.constructor = PointerLockControls;
 },{"../../../build/three.module.js":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/loaders/GLTFLoader.js":[function(require,module,exports) {
 "use strict";
 
@@ -42012,6 +42134,8 @@ var dat = _interopRequireWildcard(require("dat.gui"));
 
 var _OrbitControls = require("three/examples/jsm/controls/OrbitControls");
 
+var _PointerLockControls = require("three/examples/jsm/controls/PointerLockControls.js");
+
 var _GLTFLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
 
 var _helpers = require("./helpers.js");
@@ -42026,22 +42150,32 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var modelFolderNames = ['house', 'island', 'knowledge', 'ship', 'tree'];
+var modelFolderNames = ['house1', 'island1', 'well1', 'ship1', 'tree1'];
 var modelPath = './models/';
 var GLTFPromiseLoader = (0, _helpers.promisifyLoader)(new _GLTFLoader.GLTFLoader());
-var container, scene, camera, renderer, controls, models, gui;
+var debug = true;
+var container, scene, camera, renderer, controls, models, gui, animations;
+var time;
 var params;
 
 function init() {
+  time = 0;
   models = [];
+  animations = [];
   container = document.querySelector(".container");
   scene = new _three.Scene();
   scene.background = new _three.Color("skyblue");
-  window.scene = scene;
+  scene.fog;
+
+  if (debug) {
+    window.scene = scene;
+  }
+
   loadGLTFs();
   createCamera();
   createLights();
   createRenderer();
+  createSkyBox();
   createGeometries();
   createControls();
   initGui();
@@ -42051,19 +42185,27 @@ function init() {
   });
 }
 
+function createSkyBox() {
+  var pmremGenerator = new _three.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
+}
+
 function loadGLTFs() {
   modelFolderNames.forEach(function (folderName) {
-    var filePath = "".concat(modelPath).concat(folderName, "/").concat(folderName, ".glb");
+    var filePath = "".concat(modelPath).concat(folderName, "/scene.gltf");
     GLTFPromiseLoader.load(filePath).then(function (loadedObject) {
       var gltf = loadedObject.scene;
       gltf.name = folderName;
       console.log(gltf);
       scene.add(gltf);
-      models.push(gltf);
+      models.push(loadedObject); // let mixer = mixer = new AnimationMixer( object );
+
+      animations.push(loadedObject);
     }).catch(function (err) {
       return console.error(err);
     });
   });
+  window.models = models;
 }
 
 function initGui() {
@@ -42073,18 +42215,23 @@ function initGui() {
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
 
-  gui.add(params, 'test', 0.0, 10.0);
+  gui.add(params, 'test', 0.0, 100.0);
 }
 
 function createCamera() {
   var aspect = container.clientWidth / container.clientHeight;
   camera = new _three.PerspectiveCamera(35, aspect, 0.1, 1000);
-  camera.position.set(2, 1, 5);
+
+  if (debug) {
+    window.camera = camera;
+  }
+
+  camera.position.set(-50, 6, 105);
 }
 
 function createLights() {
   var directionalLight = new _three.DirectionalLight(0xffffff, 5);
-  directionalLight.position.set(5, 5, 10);
+  directionalLight.position.set(-65, 12, 75);
   var directionalLightHelper = new _three.DirectionalLightHelper(directionalLight, 5);
   var hemisphereLight = new _three.HemisphereLight(0xddeeff, 0x202020, 3); // scene.add(directionalLight, directionalLightHelper, hemisphereLight);
 }
@@ -42093,8 +42240,16 @@ function createRenderer() {
   renderer = new _three.WebGLRenderer({
     antialias: true
   });
+
+  if (debug) {
+    window.render = renderer;
+  }
+
   renderer.setSize(container.clientWidth, container.clientHeight);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(window.devicePixelRatio); // renderer.outputEncoding = sRGBEncoding;
+  // renderer.toneMapping = ACESFilmicToneMapping;
+  // renderer.toneMappingExposure = 1.0;
+
   renderer.physicallyCorrectLights = true;
   container.appendChild(renderer.domElement);
 }
@@ -42117,9 +42272,42 @@ function createGeometries() {
 
 function createControls() {
   controls = new _OrbitControls.OrbitControls(camera, renderer.domElement);
+  controls.target = new _three.Vector3(15, 0, 75);
+  controls.update();
+
+  if (debug) {
+    window.controls = controls;
+  }
+  /*
+  controls = new PointerLockControls( camera, document.body );
+  let blocker = document.getElementById( 'blocker' );
+  let instructions = document.getElementById( 'instructions' );
+   instructions.addEventListener( 'click', () => controls.lock(), false);
+   controls.addEventListener( 'lock', () => {
+    instructions.style.display = 'none';
+    blocker.style.display = 'none';
+  } );
+   controls.addEventListener( 'unlock', () => {
+    blocker.style.display = 'block';
+    instructions.style.display = '';
+  } );  
+  scene.add(controls.getObject());
+  */
+
 }
 
-function update() {}
+function toggleAnimations() {
+  for (var i = 0; i < gltf.animations.length; i++) {
+    var clip = gltf.animations[i];
+    var action = mixer.existingAction(clip);
+    action.play();
+    state.playAnimation ? action.play() : action.stop();
+  }
+}
+
+function update() {
+  time += 0.1; // controls.target.z = params.test
+}
 
 function render() {
   renderer.render(scene, camera);
@@ -42134,7 +42322,7 @@ function onWindowResize() {
 }
 
 window.addEventListener("resize", onWindowResize, false);
-},{"three":"node_modules/three/build/three.module.js","dat.gui":"node_modules/dat.gui/build/dat.gui.module.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","three/examples/jsm/loaders/GLTFLoader.js":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","./helpers.js":"src/helpers.js","./shaders/fragment.glsl":"src/shaders/fragment.glsl","./shaders/vertex.glsl":"src/shaders/vertex.glsl"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","dat.gui":"node_modules/dat.gui/build/dat.gui.module.js","three/examples/jsm/controls/OrbitControls":"node_modules/three/examples/jsm/controls/OrbitControls.js","three/examples/jsm/controls/PointerLockControls.js":"node_modules/three/examples/jsm/controls/PointerLockControls.js","three/examples/jsm/loaders/GLTFLoader.js":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","./helpers.js":"src/helpers.js","./shaders/fragment.glsl":"src/shaders/fragment.glsl","./shaders/vertex.glsl":"src/shaders/vertex.glsl"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
