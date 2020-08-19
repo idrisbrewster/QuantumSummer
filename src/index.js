@@ -14,7 +14,8 @@ import {
   ACESFilmicToneMapping,
   PMREMGenerator,
   AnimationMixer,
-  Vector3
+  Vector3,
+  FogExp2
 } from "three";
 import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -31,7 +32,7 @@ const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 const debug = true;
 let container, scene, camera, renderer, controls, models, gui, animations;
 let time;
-let params;
+let params, fog;
 
 
 function init() {
@@ -41,9 +42,7 @@ function init() {
 
   container = document.querySelector(".container");
   scene = new Scene();
-  scene.background = new Color("skyblue");
   
-  scene.fog
   if(debug) {
     window.scene = scene;
   }
@@ -56,6 +55,11 @@ function init() {
   createGeometries();
   createControls();
   initGui();
+
+  scene.background = new Color("skyblue");
+  scene.background = new Color(fog.fogHorizonColor);
+  scene.fog = new FogExp2(fog.fogHorizonColor, fog.fogDensity);
+
   renderer.setAnimationLoop(() => {
     update();
     render();
@@ -91,9 +95,40 @@ function initGui() {
     test : 1.0
   };
 
+  fog = {
+    fogNearColor: 0xfc4848,
+    fogHorizonColor: 0x7d,
+    fogDensity: 0.0074,
+    fogNoiseSpeed: 100,
+    fogNoiseFreq: .0012,
+    fogNoiseImpact: .5
+  };
+
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
   gui.add(params, 'test', 0.0, 100.0);
+  let fogFolder = gui.addFolder('Fog');
+  fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function() {
+    scene.fog.density = fog.fogDensity;
+  });
+  fogFolder.addColor(fog, "fogHorizonColor").onChange(function() {
+    scene.fog.color.set(fog.fogHorizonColor);
+    scene.background = new Color(fog.fogHorizonColor);
+  });
+  // fogFolder.addColor(fog, "fogNearColor").onChange(function() {
+  //   terrainShader.uniforms.fogNearColor = {
+  //     value: new Color(fog.fogNearColor)
+  //   };
+  // });
+  // fogFolder.add(fog, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseFreq.value = fog.fogNoiseFreq;
+  // });
+  // fogFolder.add(fog, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseSpeed.value = fog.fogNoiseSpeed;
+  // });
+  // fogFolder.add(fog, "fogNoiseImpact", 0, 1).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseImpact.value = fog.fogNoiseImpact;
+  // });
 }
 
 function createCamera() {
@@ -146,7 +181,7 @@ function createGeometries() {
   const material = createMaterials();
 
   const mesh = new Mesh(geometry, material);
-  scene.add(mesh);
+  // scene.add(mesh);
 }
 
 function createControls() {
