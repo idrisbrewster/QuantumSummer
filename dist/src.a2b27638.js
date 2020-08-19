@@ -42156,7 +42156,7 @@ var GLTFPromiseLoader = (0, _helpers.promisifyLoader)(new _GLTFLoader.GLTFLoader
 var debug = true;
 var container, scene, camera, renderer, controls, models, gui, animations;
 var time;
-var params;
+var params, fog;
 
 function init() {
   time = 0;
@@ -42164,8 +42164,6 @@ function init() {
   animations = [];
   container = document.querySelector(".container");
   scene = new _three.Scene();
-  scene.background = new _three.Color("skyblue");
-  scene.fog;
 
   if (debug) {
     window.scene = scene;
@@ -42179,6 +42177,9 @@ function init() {
   createGeometries();
   createControls();
   initGui();
+  scene.background = new _three.Color("skyblue");
+  scene.background = new _three.Color(fog.fogHorizonColor);
+  scene.fog = new _three.FogExp2(fog.fogHorizonColor, fog.fogDensity);
   renderer.setAnimationLoop(function () {
     update();
     render();
@@ -42212,10 +42213,39 @@ function initGui() {
   params = {
     test: 1.0
   };
+  fog = {
+    fogNearColor: 0xfc4848,
+    fogHorizonColor: 0x7d,
+    fogDensity: 0.0074,
+    fogNoiseSpeed: 100,
+    fogNoiseFreq: .0012,
+    fogNoiseImpact: .5
+  };
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
 
   gui.add(params, 'test', 0.0, 100.0);
+  var fogFolder = gui.addFolder('Fog');
+  fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function () {
+    scene.fog.density = fog.fogDensity;
+  });
+  fogFolder.addColor(fog, "fogHorizonColor").onChange(function () {
+    scene.fog.color.set(fog.fogHorizonColor);
+    scene.background = new _three.Color(fog.fogHorizonColor);
+  }); // fogFolder.addColor(fog, "fogNearColor").onChange(function() {
+  //   terrainShader.uniforms.fogNearColor = {
+  //     value: new Color(fog.fogNearColor)
+  //   };
+  // });
+  // fogFolder.add(fog, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseFreq.value = fog.fogNoiseFreq;
+  // });
+  // fogFolder.add(fog, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseSpeed.value = fog.fogNoiseSpeed;
+  // });
+  // fogFolder.add(fog, "fogNoiseImpact", 0, 1).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseImpact.value = fog.fogNoiseImpact;
+  // });
 }
 
 function createCamera() {
@@ -42266,8 +42296,7 @@ function createMaterials() {
 function createGeometries() {
   var geometry = new _three.SphereBufferGeometry(1, 30, 30);
   var material = createMaterials();
-  var mesh = new _three.Mesh(geometry, material);
-  scene.add(mesh);
+  var mesh = new _three.Mesh(geometry, material); // scene.add(mesh);
 }
 
 function createControls() {
@@ -42350,7 +42379,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51984" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62325" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
