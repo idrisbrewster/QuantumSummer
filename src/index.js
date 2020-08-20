@@ -17,28 +17,37 @@ import {
   Vector3,
   FogExp2
 } from "three";
+//TODO: Remove THREE import on production
+import * as THREE from 'three';
+window.THREE = THREE;
+
 import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
-
+import {ActivationSite} from "./ActivationSite.js";
 import fragmentShader from "./shaders/fragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
-const modelFolderNames = ['house1', 'island1', 'well1', 'ship1', 'tree1'];
+const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
 const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 const debug = true;
+
 let container, scene, camera, renderer, controls, models, gui, animations;
 let time;
 let params, fog;
+let activationSites;
+
+
 
 
 function init() {
   time = 0;
   models = [];
   animations = [];
+  activationSites = [];
 
   container = document.querySelector(".container");
   scene = new Scene();
@@ -52,7 +61,7 @@ function init() {
   createLights();
   createRenderer();
   createSkyBox();
-  createGeometries();
+  
   createControls();
   initGui();
 
@@ -71,20 +80,49 @@ function createSkyBox() {
   pmremGenerator.compileEquirectangularShader();
 }
 
+function getGLTFPosition(gltf) {
+  try {
+    if(!gltf) {
+      return new Vector3(0);
+    }
+    let position = gltf.position;
+    if(!position) {
+      return new Vector3(0);
+    }
+    if(position.x === 0 && position.y === 0 && position.z ===0) {
+      return getGLTFPosition(gltf.children[0]);
+    } else {
+      return gltf.position;
+    }
+  }
+  catch (e) {
+    console.error('tried getting position from GLTF', e);
+  }
+  
+
+}
+
 function loadGLTFs() {
   modelFolderNames.forEach(folderName => {
     let filePath = `${modelPath}${folderName}/scene.gltf`;
     GLTFPromiseLoader.load( filePath )
     .then((loadedObject) => {
-      let gltf = loadedObject.scene;
-      gltf.name = folderName;
-      console.log(gltf);
-      scene.add(gltf);
+      let gltfScene = loadedObject.scene;
+      gltfScene.name = folderName;
+      console.log(gltfScene, loadedObject);
+      let position = getGLTFPosition(gltfScene);
+      console.log('position', position);
+      scene.add(gltfScene);
       models.push(loadedObject);
       // let mixer = mixer = new AnimationMixer( object );
       animations.push(loadedObject);
+      if(loadedObject.animations.length) {
+        console.log('loaded', gltfScene.name, position)
+        let activationSite = new ActivationSite(position,loadedObject, gltfScene, null, null)
+        activationSites.push(activationSite);
+      }
+      createGeometries(position);
     })
-
     .catch( (err) => console.error( err ) );
   });
   window.models = models;
@@ -92,7 +130,7 @@ function loadGLTFs() {
 
 function initGui() {
   params = {
-    test : 1.0
+    activationDistance : 10.0
   };
 
   fog = {
@@ -106,7 +144,7 @@ function initGui() {
 
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
-  gui.add(params, 'test', 0.0, 100.0);
+  gui.add(params, 'activationDistance', 0.0, 100.0);
   let fogFolder = gui.addFolder('Fog');
   fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function() {
     scene.fog.density = fog.fogDensity;
@@ -176,12 +214,13 @@ function createMaterials() {
   return material;
 }
 
-function createGeometries() {
-  const geometry = new SphereBufferGeometry(1, 30, 30);
+function createGeometries(position) {
+  const geometry = new SphereBufferGeometry(10, 30, 30);
   const material = createMaterials();
 
   const mesh = new Mesh(geometry, material);
-  // scene.add(mesh);
+  mesh.position.set(position.x, position.y, position.z)
+  scene.add(mesh);
 }
 
 function createControls() {
@@ -222,6 +261,8 @@ function toggleAnimations() {
 
 function update() {
   time += 0.1;
+  activationSites.forEach(site => site.update(camera.position, params.activationDistance));
+
   // controls.target.z = params.test
 }
 
