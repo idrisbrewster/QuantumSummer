@@ -30,6 +30,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
+
 import fragmentShader from "./shaders/fragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
@@ -39,7 +40,7 @@ const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 const debug = true;
 
-let container, scene, camera, renderer, controls, firstPersonControls, orbitControls, gui, clock;
+let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
 let time;
 let params, fog;
@@ -161,11 +162,6 @@ function initGui() {
   gui.add(params, 'activationDistance', 0.0, 100.0);
   gui.add(params, 'useOrbitControls').onChange(() => {
     createControls();
-    // if(params.useOrbitControls) {
-    //   controls = orbitControls;
-    // } else {
-    //   controls = firstPersonControls;
-    // }
   });
   let fogFolder = gui.addFolder('Fog');
   fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function() {
@@ -250,16 +246,16 @@ function createGeometries(position) {
 }
 
 function createControls() {
-  
-  orbitControls = new OrbitControls(camera, renderer.domElement);
-  orbitControls.target = new Vector3(15, 0, 75);
-  orbitControls.update();
+  if(controls) {
+    controls.dispose();
+  }
   if(params.useOrbitControls) {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
-    controls = new FirstPersonControls(camera, renderer.domElement);;
+    controls = new FirstPersonControls(camera, renderer.domElement);
+    // controls = new PointerLockControls(camera, renderer.domElement);
   }
   if(debug) {
     window.controls = controls;
@@ -290,7 +286,10 @@ function update() {
   animationTime = clock.getDelta();
   time += 0.001;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
-  controls.update(animationTime);
+  if(controls.update){
+    controls.update(animationTime+.15);
+  }
+  
   renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test
 }
