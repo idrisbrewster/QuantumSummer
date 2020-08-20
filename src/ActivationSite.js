@@ -7,17 +7,30 @@ export class ActivationSite {
     this.gltfScene = gltfScene;
     this.name = gltfScene.name;
     this.audio = audio;
+    this.activated = false;
   }
 
   update(inputPosition, threshold = 10) {
-    if(this.autoPlayAnimation) {
+    if(this.autoPlayAnimation && !this.activated) {
+
+      this.activated = true;
       //auto play animaiton
     }
     let dist = this.position.distanceTo(inputPosition);
     if(dist <= threshold) {
-      console.log('NEAR', this.name, dist);
-      //play / pause animation
-      //play / pause audio
+      if(!this.activated) {
+        console.log('Activate', this.name, dist);
+        //play animation
+        //play  audio
+        this.activated = true;
+      }
+    } else {
+      if(this.activated) {
+        console.log('Deactivating', this.name, dist);
+        // pause animation
+        // pause audio
+      }
+      this.activated = false;
     }
   }
 
