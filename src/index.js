@@ -15,7 +15,8 @@ import {
   PMREMGenerator,
   AnimationMixer,
   Vector3,
-  FogExp2
+  FogExp2,
+  Clock
 } from "three";
 //TODO: Remove THREE import on production
 import * as THREE from 'three';
@@ -24,18 +25,21 @@ window.THREE = THREE;
 import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
+import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 import fragmentShader from "./shaders/fragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
-const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+// const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+const modelFolderNames = ['house', 'island', 'well', 'ship', 'tree'];
 const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 const debug = true;
 
-let container, scene, camera, renderer, controls, models, gui, animations;
+let container, scene, camera, renderer, controls, gui, clock;
 let time;
 let params, fog;
 let activationSites;
@@ -43,11 +47,11 @@ let activationSites;
 
 
 
+
 function init() {
   time = 0;
-  models = [];
-  animations = [];
   activationSites = [];
+  clock = new Clock(true);
 
   container = document.querySelector(".container");
   scene = new Scene();
@@ -104,28 +108,34 @@ function getGLTFPosition(gltf) {
 
 function loadGLTFs() {
   modelFolderNames.forEach(folderName => {
-    let filePath = `${modelPath}${folderName}/scene.gltf`;
+    // let filePath = `${modelPath}${folderName}/scene.gltf`;
+    let filePath = `${modelPath}${folderName}/${folderName}.glb`;
     GLTFPromiseLoader.load( filePath )
     .then((loadedObject) => {
+      
       let gltfScene = loadedObject.scene;
       gltfScene.name = folderName;
-      console.log(gltfScene, loadedObject);
-      let position = getGLTFPosition(gltfScene);
-      console.log('position', position);
-      scene.add(gltfScene);
-      models.push(loadedObject);
-      // let mixer = mixer = new AnimationMixer( object );
-      animations.push(loadedObject);
-      if(loadedObject.animations.length) {
-        console.log('loaded', gltfScene.name, position)
-        let activationSite = new ActivationSite(position,loadedObject, gltfScene, null, null)
-        activationSites.push(activationSite);
+      if(name.includes('island')){
+        gltfScene.receiveShadow = true;
+        loadedObject.receiveShadow = true;
       }
+      let position = getGLTFPosition(gltfScene);
+      console.log(gltfScene, loadedObject, position);
+      scene.add(gltfScene);
+      gltfScene.traverse( function ( node ) {
+        if ( node.isMesh || node.isLight ) node.castShadow = true;
+      } );
+      
+
+      let mixer = new AnimationMixer( gltfScene );
+      
+
+      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
+      activationSites.push(activationSite);
       createGeometries(position);
     })
     .catch( (err) => console.error( err ) );
   });
-  window.models = models;
 }
 
 function initGui() {
@@ -181,11 +191,12 @@ function createCamera() {
 
 function createLights() {
   const directionalLight = new DirectionalLight(0xffffff, 5);
-  directionalLight.position.set(-65, 12, 75);
+  directionalLight.position.set(-50, 6, 105);
 
   const directionalLightHelper = new DirectionalLightHelper(directionalLight, 5);
 
   const hemisphereLight = new HemisphereLight(0xddeeff, 0x202020, 3);
+  // hemisphereLight.castShadow = true;
   // scene.add(directionalLight, directionalLightHelper, hemisphereLight);
 }
 
@@ -196,6 +207,9 @@ function createRenderer() {
   }
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
+  // renderer.shadowMap.enabled = true;
+  // renderer.shadowMap.type = PCFSoftShadowMap;
+
   // renderer.outputEncoding = sRGBEncoding;
   // renderer.toneMapping = ACESFilmicToneMapping;
   // renderer.toneMappingExposure = 1.0;
@@ -224,6 +238,9 @@ function createGeometries(position) {
 }
 
 function createControls() {
+  
+  // controls = new FirstPersonControls(camera, renderer.domElement);
+  // controls.activeLook = false;
   controls = new OrbitControls(camera, renderer.domElement);
   controls.target = new Vector3(15, 0, 75);
   controls.update();
@@ -250,19 +267,13 @@ function createControls() {
   */
 }
 
-function toggleAnimations() {
-  for ( var i = 0; i < gltf.animations.length; i ++ ) {
-    var clip = gltf.animations[ i ];
-    var action = mixer.existingAction( clip );
-    action.play();
-    state.playAnimation ? action.play() : action.stop();
-  }
-}
+
 
 function update() {
-  time += 0.1;
-  activationSites.forEach(site => site.update(camera.position, params.activationDistance));
-
+  time = clock.getDelta();
+  activationSites.forEach(site => site.update(time, camera.position, params.activationDistance));
+  controls.update(time);
+  renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test
 }
 
