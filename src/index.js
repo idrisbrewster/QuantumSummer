@@ -39,7 +39,8 @@ const modelPath = './models/';
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 const debug = true;
 
-let container, scene, camera, renderer, controls, gui, clock;
+let container, scene, camera, renderer, controls, firstPersonControls, orbitControls, gui, clock;
+let animationTime;
 let time;
 let params, fog;
 let activationSites;
@@ -49,6 +50,7 @@ let activationSites;
 
 
 function init() {
+  animationTime = 0;
   time = 0;
   activationSites = [];
   clock = new Clock(true);
@@ -66,9 +68,9 @@ function init() {
   createRenderer();
   createSkyBox();
   
-  createControls();
+  
   initGui();
-
+  createControls();
   scene.background = new Color("skyblue");
   scene.background = new Color(fog.fogHorizonColor);
   scene.fog = new FogExp2(fog.fogHorizonColor, fog.fogDensity);
@@ -140,7 +142,9 @@ function loadGLTFs() {
 
 function initGui() {
   params = {
-    activationDistance : 10.0
+    activationDistance : 10.0,
+    useOrbitControls: debug
+    // useOrbitControls: false
   };
 
   fog = {
@@ -155,6 +159,14 @@ function initGui() {
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
   gui.add(params, 'activationDistance', 0.0, 100.0);
+  gui.add(params, 'useOrbitControls').onChange(() => {
+    createControls();
+    // if(params.useOrbitControls) {
+    //   controls = orbitControls;
+    // } else {
+    //   controls = firstPersonControls;
+    // }
+  });
   let fogFolder = gui.addFolder('Fog');
   fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function() {
     scene.fog.density = fog.fogDensity;
@@ -239,11 +251,16 @@ function createGeometries(position) {
 
 function createControls() {
   
-  // controls = new FirstPersonControls(camera, renderer.domElement);
-  // controls.activeLook = false;
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.target = new Vector3(15, 0, 75);
-  controls.update();
+  orbitControls = new OrbitControls(camera, renderer.domElement);
+  orbitControls.target = new Vector3(15, 0, 75);
+  orbitControls.update();
+  if(params.useOrbitControls) {
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.target = new Vector3(15, 0, 75);
+    controls.update();
+  } else {
+    controls = new FirstPersonControls(camera, renderer.domElement);;
+  }
   if(debug) {
     window.controls = controls;
   }
@@ -270,9 +287,10 @@ function createControls() {
 
 
 function update() {
-  time = clock.getDelta();
-  activationSites.forEach(site => site.update(time, camera.position, params.activationDistance));
-  controls.update(time);
+  animationTime = clock.getDelta();
+  time += 0.001;
+  activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
+  controls.update(animationTime);
   renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test
 }
@@ -287,6 +305,7 @@ function onWindowResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
+  controls.handleResize();
 }
 window.addEventListener("resize", onWindowResize, false);
 
