@@ -22,7 +22,8 @@ import {
   DoubleSide,
   MeshBasicMaterial,
   AdditiveBlending,
-  BackSide
+  BackSide,
+  Vector2
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -83,7 +84,7 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  // createSkyBox();
+  createSkyBox();
   
   
   
@@ -258,6 +259,7 @@ function createSkyMaterial() {
   const material = new ShaderMaterial({
     uniforms: {
       iTime: { value: 1.0 },
+      iMouse: { value: new Vector2(.5, .5) },
       iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) }
     },
     blending: AdditiveBlending,
@@ -325,19 +327,21 @@ function update() {
   if(controls.update){
     controls.update(animationTime+.15);
   }
-
+  let sky = scene.getObjectByName('sky');
+  
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
       let avgFreq = site.audioAnalyser.getAverageFrequency();
       console.log('playing', site.name, avgFreq/1000);
       scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+      if(sky) {
+        let mouse = sky.material.uniforms.iMouse.value;
+        sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
+        // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
+      }
     }
   })
-  let sky = scene.getObjectByName('sky');
-  if(sky) {
-    console.log(sky.material.uniforms.iTime.value)
-    sky.material.uniforms.iTime.value = time;
-  }
+  
   
   // renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test

@@ -1,6 +1,6 @@
 // Star Nest by Pablo Roman Andrioli
-
 // This content is under the MIT License.
+
 #define iterations 17
 #define formuparam 0.53
 
@@ -17,13 +17,13 @@
 #define saturation 0.850
 varying vec2 vUv;
 uniform float iTime;
-// uniform vec2 iMouse;
+uniform vec2 iMouse;
 
 uniform vec3 iResolution;
 
 void main() {
 	// get coords and direction
-    vec2 iMouse = vec2(0.5, 0.5);
+    // vec2 iMouse = vec2(0.5, 0.5);
 	//vec2 uv = fragCoord.xy / iResolution.xy-.5;
 	//uv.y *= iResolution.y / iResolution.x;
     vec2 uv = vUv;
@@ -31,8 +31,8 @@ void main() {
 	float time = iTime * speed + .25;
 
 	// mouse rotation
-	float a1 = .5 + iMouse.x / iResolution.x * 2.;
-	float a2 = .8 + iMouse.y / iResolution.y * 2.;
+	float a1 = .5 + iMouse.x / iResolution.x ;
+	float a2 = .8 + iMouse.y / iResolution.y ;
 	mat2 rot1 = mat2(cos(a1), sin(a1), -sin(a1), cos(a1));
 	mat2 rot2 = mat2(cos(a2), sin(a2), -sin(a2), cos(a2));
 	dir.xz *= rot1;
