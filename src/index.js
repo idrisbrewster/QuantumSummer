@@ -18,6 +18,7 @@ import {
   FogExp2,
   Clock,
   AudioListener,
+  AudioAnalyser
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -33,7 +34,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import {asyncLoadAudio} from './loadAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { promisifyLoader, getGLTFPosition } from './helpers.js';
+import { promisifyLoader, getGLTFPosition, lerp } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/fragment.glsl";
@@ -51,7 +52,7 @@ const debug = true;
 let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
 let time;
-let params, fog;
+let params, fog, audioParams;
 let activationSites;
 
 let audioListener;
@@ -106,6 +107,7 @@ function initAudioTracks() {
       if(site && site.length) {
         site = site[0];
         site.audio = audio;
+        site.audioAnalyser = new AudioAnalyser(audio, audioParams.fftSize);
         site.gltfScene.add(audio);
       }
     });
@@ -153,7 +155,7 @@ function loadGLTFs() {
 
 function initGui() {
   params = {
-    activationDistance : 10.0,
+    activationDistance : 50.0,
     useOrbitControls: debug
     // useOrbitControls: false
   };
@@ -167,6 +169,10 @@ function initGui() {
     fogNoiseImpact: .5
   };
 
+  audioParams = {
+    fftSize: 32
+  };
+
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
   gui.add(params, 'activationDistance', 0.0, 100.0);
@@ -174,9 +180,9 @@ function initGui() {
     createControls();
   });
   let fogFolder = gui.addFolder('Fog');
-  fogFolder.add(fog, "fogDensity", 0, 0.01).onChange(function() {
+  fogFolder.add(fog, "fogDensity", 0, 0.1).onChange(function() {
     scene.fog.density = fog.fogDensity;
-  });
+  }).listen();
   fogFolder.addColor(fog, "fogHorizonColor").onChange(function() {
     scene.fog.color.set(fog.fogHorizonColor);
     scene.background = new Color(fog.fogHorizonColor);
@@ -299,6 +305,15 @@ function update() {
   if(controls.update){
     controls.update(animationTime+.15);
   }
+
+  activationSites.forEach(site => {
+    if(site && site.audio && site.audio.isPlaying){
+      let avgFreq = site.audioAnalyser.getAverageFrequency();
+      console.log('playing', site.name, avgFreq/1000);
+      // fog.fogDensity = 
+      scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+    }
+  })
   
   renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test

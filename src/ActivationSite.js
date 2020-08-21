@@ -14,6 +14,8 @@ export class ActivationSite {
 
     this.activatedAutoPlay = false;
     this.activated = false;
+    this.audioAnalyser = null;
+    this.fftSize = 32;
   }
 
   update(time, inputPosition, threshold = 10) {
