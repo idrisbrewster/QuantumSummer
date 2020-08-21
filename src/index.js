@@ -33,7 +33,7 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import {asyncLoadAudio} from './loadAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { promisifyLoader } from './helpers.js';
+import { promisifyLoader, getGLTFPosition } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/fragment.glsl";
@@ -115,26 +115,6 @@ function initAudioTracks() {
 function createSkyBox() {
   let pmremGenerator = new PMREMGenerator( renderer );
   pmremGenerator.compileEquirectangularShader();
-}
-
-function getGLTFPosition(gltf) {
-  try {
-    if(!gltf) {
-      return new Vector3(0);
-    }
-    let position = gltf.position;
-    if(!position) {
-      return new Vector3(0);
-    }
-    if(position.x === 0 && position.y === 0 && position.z ===0) {
-      return getGLTFPosition(gltf.children[0]);
-    } else {
-      return gltf.position;
-    }
-  }
-  catch (e) {
-    console.error('tried getting position from GLTF', e);
-  }
 }
 
 function loadGLTFs() {
