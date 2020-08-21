@@ -18,7 +18,11 @@ import {
   FogExp2,
   Clock,
   AudioListener,
-  AudioAnalyser
+  AudioAnalyser,
+  DoubleSide,
+  MeshBasicMaterial,
+  AdditiveBlending,
+  BackSide
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -37,7 +41,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader, getGLTFPosition, lerp } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
-import fragmentShader from "./shaders/fragment.glsl";
+import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
 const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
@@ -79,7 +83,7 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  createSkyBox();
+  // createSkyBox();
   
   
   
@@ -115,8 +119,15 @@ function initAudioTracks() {
 }
 
 function createSkyBox() {
-  let pmremGenerator = new PMREMGenerator( renderer );
-  pmremGenerator.compileEquirectangularShader();
+  // let pmremGenerator = new PMREMGenerator( renderer );
+  // pmremGenerator.compileEquirectangularShader();
+  const geometry = new SphereBufferGeometry(500, 100, 100);
+  // const material = new MeshBasicMaterial();
+  const material = createSkyMaterial();
+  const mesh = new Mesh(geometry, material);
+  mesh.position.set(15, 0, 75);
+  mesh.name = 'sky';
+  scene.add(mesh);
 }
 
 function loadGLTFs() {
@@ -242,11 +253,19 @@ function createRenderer() {
   container.appendChild(renderer.domElement);
 }
 
-function createMaterials() {
+function createSkyMaterial() {
   //const material = new MeshStandardMaterial({ wireframe: true });
   const material = new ShaderMaterial({
+    uniforms: {
+      iTime: { value: 1.0 },
+      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) }
+    },
+    blending: AdditiveBlending,
+    transparent: true,
+    // fog: true,
     fragmentShader: fragmentShader,
-    vertexShader: vertexShader
+    vertexShader: vertexShader,
+    side: BackSide,
   });
 
   return material;
@@ -254,8 +273,9 @@ function createMaterials() {
 
 function createGeometries(position) {
   const geometry = new SphereBufferGeometry(10, 30, 30);
-  const material = createMaterials();
-
+  const material = new MeshBasicMaterial();
+  // const material = createSkyMaterial();
+  
   const mesh = new Mesh(geometry, material);
   mesh.position.set(position.x, position.y, position.z)
   scene.add(mesh);
@@ -300,7 +320,7 @@ function createControls() {
 
 function update() {
   animationTime = clock.getDelta();
-  time += 0.001;
+  time += 0.01;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
   if(controls.update){
     controls.update(animationTime+.15);
@@ -310,12 +330,16 @@ function update() {
     if(site && site.audio && site.audio.isPlaying){
       let avgFreq = site.audioAnalyser.getAverageFrequency();
       console.log('playing', site.name, avgFreq/1000);
-      // fog.fogDensity = 
       scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
     }
   })
+  let sky = scene.getObjectByName('sky');
+  if(sky) {
+    console.log(sky.material.uniforms.iTime.value)
+    sky.material.uniforms.iTime.value = time;
+  }
   
-  renderer.shadowMap.needsUpdate = true;
+  // renderer.shadowMap.needsUpdate = true;
   // controls.target.z = params.test
 }
 

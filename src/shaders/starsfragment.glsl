@@ -1,11 +1,3 @@
-varying vec3 N;
-const vec3 L = vec3(.5, .5, 1.);
-
-void main() {
- gl_FragColor = vec4(vec3(dot(L, N)), 1.);
-}
-
-
 // Star Nest by Pablo Roman Andrioli
 
 // This content is under the MIT License.
@@ -17,21 +9,24 @@ void main() {
 
 #define zoom 0.800
 #define tile 0.850
-#define speed 0.000010 
+#define speed 0.00010 
 
 #define brightness 0.0015
 #define darkmatter 0.300
 #define distfading 0.730
 #define saturation 0.850
-
+varying vec2 vUv;
 uniform float iTime;
-uniform vec2 iMouse;
+// uniform vec2 iMouse;
+
 uniform vec3 iResolution;
 
 void main() {
 	// get coords and direction
-	vec2 uv = gl_fragCoord.xy / iResolution.xy-.5;
-	uv.y *= iResolution.y / iResolution.x;
+    vec2 iMouse = vec2(0.5, 0.5);
+	//vec2 uv = fragCoord.xy / iResolution.xy-.5;
+	//uv.y *= iResolution.y / iResolution.x;
+    vec2 uv = vUv;
 	vec3 dir = vec3(uv * zoom, 1.);
 	float time = iTime * speed + .25;
 
