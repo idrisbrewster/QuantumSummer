@@ -37,3 +37,7 @@ export function getGLTFPosition(gltf) {
     console.error('tried getting position from GLTF', e);
   }
 }
+
+export function lerp (start, end, amt){
+  return (1-amt)*start+amt*end
+}
