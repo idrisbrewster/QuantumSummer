@@ -32,6 +32,9 @@ export class ActivationSite {
         console.log('Activate', this.name, dist);
         //play animation
         //play  audio
+        if(this.audio) {
+          this.audio.play();
+        }
         this.shouldPlayAnimation(true)
         this.activated = true;
       }
@@ -40,6 +43,10 @@ export class ActivationSite {
         console.log('Deactivating', this.name, dist);
         // pause animation
         // pause audio
+        if(this.audio) {
+          this.audio.pause();
+        }
+
         this.shouldPlayAnimation(false)
       }
       this.activated = false;

@@ -16,8 +16,11 @@ import {
   AnimationMixer,
   Vector3,
   FogExp2,
-  Clock
+  Clock,
+  AudioListener,
 } from "three";
+
+import 'regenerator-runtime/runtime'
 //TODO: Remove THREE import on production
 import * as THREE from 'three';
 window.THREE = THREE;
@@ -27,6 +30,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
 
+import {asyncLoadAudio} from './loadAudio.js';
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { promisifyLoader } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
@@ -34,10 +39,13 @@ import {ActivationSite} from "./ActivationSite.js";
 import fragmentShader from "./shaders/fragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
-// const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
-const modelFolderNames = ['house', 'island', 'well', 'ship', 'tree'];
+const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+// const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
+const audioPath = './models/audio/';
+const audioTrackNames = ['house', 'ship'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
+
 const debug = true;
 
 let container, scene, camera, renderer, controls, gui, clock;
@@ -45,6 +53,8 @@ let animationTime;
 let time;
 let params, fog;
 let activationSites;
+
+let audioListener;
 
 
 
@@ -54,6 +64,7 @@ function init() {
   animationTime = 0;
   time = 0;
   activationSites = [];
+  window.activationSite = activationSites;
   clock = new Clock(true);
 
   container = document.querySelector(".container");
@@ -70,6 +81,7 @@ function init() {
   createSkyBox();
   
   
+  
   initGui();
   createControls();
   scene.background = new Color("skyblue");
@@ -80,6 +92,24 @@ function init() {
     update();
     render();
   });
+}
+
+function initAudioTracks() {
+  audioListener = new AudioListener();
+  camera.add(audioListener);
+  for(let name of audioTrackNames) {
+    let path = `${audioPath}${name}.wav`;
+    asyncLoadAudio(audioListener, path).then((audio) => {
+      audio.setLoop( true );
+      audio.setRefDistance(5);
+      let site = activationSites.filter(site => site.name.includes(name));
+      if(site && site.length) {
+        site = site[0];
+        site.audio = audio;
+        site.gltfScene.add(audio);
+      }
+    });
+  }
 }
 
 function createSkyBox() {
@@ -105,23 +135,21 @@ function getGLTFPosition(gltf) {
   catch (e) {
     console.error('tried getting position from GLTF', e);
   }
-  
-
 }
 
 function loadGLTFs() {
   modelFolderNames.forEach(folderName => {
-    // let filePath = `${modelPath}${folderName}/scene.gltf`;
-    let filePath = `${modelPath}${folderName}/${folderName}.glb`;
+    let filePath = `${modelPath}${folderName}/scene.gltf`;
+    // let filePath = `${modelPath}${folderName}/scene.glb`;
     GLTFPromiseLoader.load( filePath )
     .then((loadedObject) => {
       
       let gltfScene = loadedObject.scene;
       gltfScene.name = folderName;
-      if(name.includes('island')){
-        gltfScene.receiveShadow = true;
-        loadedObject.receiveShadow = true;
-      }
+      // if(name.includes('island')){
+      //   gltfScene.receiveShadow = true;
+      //   loadedObject.receiveShadow = true;
+      // }
       let position = getGLTFPosition(gltfScene);
       console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
@@ -140,6 +168,8 @@ function loadGLTFs() {
     .catch( (err) => console.error( err ) );
   });
 }
+
+
 
 function initGui() {
   params = {
@@ -298,14 +328,32 @@ function render() {
   renderer.render(scene, camera);
 }
 
-init();
+// we have to initialize the audio on a click action
+let instructions = document.querySelector('.instructions');
+let blocker = document.querySelector('.blocker');
+console.log(instructions)
+let loadPage = () => {
+  console.log('click')
+  initAudioTracks();
+  instructions.removeEventListener('click', loadPage, false);
+  instructions.removeEventListener('touch', loadPage, false);
+  blocker.style.display = 'none';
+  instructions.style.display = 'none';
+}
+instructions.addEventListener('click', loadPage ,false);
+instructions.addEventListener('touch', loadPage ,false);
+
 
 function onWindowResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(container.clientWidth, container.clientHeight);
-  controls.handleResize();
+  if(controls.handleResize) {
+    controls.handleResize();
+  }
+  
 }
 window.addEventListener("resize", onWindowResize, false);
 
 
+init();
