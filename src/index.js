@@ -39,7 +39,8 @@ import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonCont
 import {asyncLoadAudio} from './loadAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { promisifyLoader, getGLTFPosition, lerp } from './helpers.js';
+
+import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/starsfragment.glsl";
@@ -57,7 +58,7 @@ const debug = true;
 let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
 let time;
-let params, fog, audioParams;
+// let params, fogParams, audioParams;
 let activationSites;
 
 let audioListener;
@@ -91,8 +92,8 @@ function init() {
   initGui();
   createControls();
   scene.background = new Color("skyblue");
-  scene.background = new Color(fog.fogHorizonColor);
-  scene.fog = new FogExp2(fog.fogHorizonColor, fog.fogDensity);
+  scene.background = new Color(fogParams.fogHorizonColor);
+  scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
 
   renderer.setAnimationLoop(() => {
     update();
@@ -166,24 +167,6 @@ function loadGLTFs() {
 
 
 function initGui() {
-  params = {
-    activationDistance : 50.0,
-    useOrbitControls: debug
-    // useOrbitControls: false
-  };
-
-  fog = {
-    fogNearColor: 0xfc4848,
-    fogHorizonColor: 0x7d,
-    fogDensity: 0.0074,
-    fogNoiseSpeed: 100,
-    fogNoiseFreq: .0012,
-    fogNoiseImpact: .5
-  };
-
-  audioParams = {
-    fftSize: 32
-  };
 
   gui = new dat.GUI();
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
@@ -192,26 +175,26 @@ function initGui() {
     createControls();
   });
   let fogFolder = gui.addFolder('Fog');
-  fogFolder.add(fog, "fogDensity", 0, 0.1).onChange(function() {
-    scene.fog.density = fog.fogDensity;
+  fogFolder.add(fogParams, "fogDensity", 0, 0.1).onChange(function() {
+    scene.fogParams.density = fogParams.fogDensity;
   }).listen();
-  fogFolder.addColor(fog, "fogHorizonColor").onChange(function() {
-    scene.fog.color.set(fog.fogHorizonColor);
-    scene.background = new Color(fog.fogHorizonColor);
+  fogFolder.addColor(fogParams, "fogHorizonColor").onChange(function() {
+    scene.fogParams.color.set(fogParams.fogHorizonColor);
+    scene.background = new Color(fogParams.fogHorizonColor);
   });
-  // fogFolder.addColor(fog, "fogNearColor").onChange(function() {
+  // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
   //   terrainShader.uniforms.fogNearColor = {
-  //     value: new Color(fog.fogNearColor)
+  //     value: new Color(fogParams.fogNearColor)
   //   };
   // });
-  // fogFolder.add(fog, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseFreq.value = fog.fogNoiseFreq;
+  // fogFolder.add(fogParams, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseFreq.value = fogParams.fogNoiseFreq;
   // });
-  // fogFolder.add(fog, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseSpeed.value = fog.fogNoiseSpeed;
+  // fogFolder.add(fogParams, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseSpeed.value = fogParams.fogNoiseSpeed;
   // });
-  // fogFolder.add(fog, "fogNoiseImpact", 0, 1).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseImpact.value = fog.fogNoiseImpact;
+  // fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
+  //   terrainShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
   // });
 }
 

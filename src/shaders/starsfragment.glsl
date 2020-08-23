@@ -27,6 +27,7 @@ void main() {
 	//vec2 uv = fragCoord.xy / iResolution.xy-.5;
 	//uv.y *= iResolution.y / iResolution.x;
     vec2 uv = vUv;
+    
 	vec3 dir = vec3(uv * zoom, 1.);
 	float time = iTime * speed + .25;
 
@@ -47,6 +48,7 @@ void main() {
 	vec3 v = vec3(0.);
 	for (int r = 0; r < volsteps; r++) {
 		vec3 p = from + s * dir * .5;
+        // p = abs
 		p = abs(vec3(tile)-mod(p, vec3(tile * 2.))); // tiling fold
 		float pa, a = pa = 0.;
 		for (int i = 0; i < iterations; i++) { 

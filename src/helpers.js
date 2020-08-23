@@ -1,6 +1,27 @@
 import {
   Vector3,
 } from "three";
+
+
+export let params = {
+  activationDistance : 50.0,
+  useOrbitControls: true
+  // useOrbitControls: false
+};
+
+export let fogParams = {
+  fogNearColor: 0xfc4848,
+  fogHorizonColor: 0x7d,
+  fogDensity: 0.0074,
+  fogNoiseSpeed: 100,
+  fogNoiseFreq: .0012,
+  fogNoiseImpact: .5
+};
+
+export let audioParams = {
+  fftSize: 32
+};
+
 export function promisifyLoader ( loader, onProgress ) {
 
     function promiseLoader ( url ) {
