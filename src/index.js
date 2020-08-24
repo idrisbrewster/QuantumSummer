@@ -6,6 +6,7 @@ import {
   Mesh,
   Color,
   SphereBufferGeometry,
+  BoxBufferGeometry,
   HemisphereLight,
   DirectionalLight,
   DirectionalLightHelper,
@@ -137,12 +138,15 @@ function createSkyBox() {
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
   const geometry = new SphereBufferGeometry(500, 100, 100);
-  geometry.rotateX(Math.PI/2);
-  geometry.rotateZ(Math.PI/2);
+  // const geometry = new BoxBufferGeometry(500, 500, 500);
+  
+  
   const material = createSkyMaterial();
   const mesh = new Mesh(geometry, material);
-  
-  mesh.position.set(15, -50, 75);
+  mesh.rotateX(Math.PI/2);
+  mesh.rotateZ(Math.PI/2);
+  window.sphereGeom = mesh
+  mesh.position.set(15, -300, 75);
   mesh.name = 'sky';
   scene.add(mesh);
 }

@@ -16,6 +16,7 @@
 #define distfading 0.730
 #define saturation 0.850
 varying vec2 vUv;
+varying vec3 N;
 uniform float iTime;
 uniform vec2 iMouse;
 
@@ -26,7 +27,8 @@ void main() {
     // vec2 iMouse = vec2(0.5, 0.5);
 	//vec2 uv = fragCoord.xy / iResolution.xy-.5;
 	//uv.y *= iResolution.y / iResolution.x;
-    vec2 uv = vUv;
+    // vec2 uv = vUv;
+	vec2 uv = normalize( N ).xy * 0.5 + 0.5;
     
 	vec3 dir = vec3(uv * zoom, 1.);
 	float time = iTime * speed + .25;
