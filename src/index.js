@@ -24,14 +24,15 @@ import {
   MeshBasicMaterial,
   AdditiveBlending,
   BackSide,
-  Vector2
+  Vector2,
+  FrontSide
 } from "three";
 
 import 'regenerator-runtime/runtime'
 //TODO: Remove THREE import on production
 import * as THREE from 'three';
 import * as Stats from 'stats.js';
-// window.stats = Stats.default();
+
 window.THREE = THREE;
 
 import * as dat from 'dat.gui';
@@ -53,11 +54,17 @@ import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
-const modelFolderNames = ['house', 'island1_old', 'well', 'ship', 'tree'];
+const modelFolderNames = ['house', 'island', 'well', 'ships', 'trees'];
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
-const audioTrackNames = ['house', 'ship'];
+const audioTrackNames = {
+  'house' : '.wav',
+  'ship' : '.wav',
+  'tree' : '.mp3',
+  'well' : '.wav'
+};
+// const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
 const debug = true;
@@ -68,6 +75,7 @@ let time;
 let water;
 let activationSites;
 let audioData;
+let activationSiteHelpers;
 
 let stats;
 
@@ -82,6 +90,7 @@ function init() {
   time = 0;
   // audioData = new Array(audioParams.fftSize).fill(1.0);
   activationSites = [];
+  activationSiteHelpers = [];
   window.activationSite = activationSites;
   clock = new Clock(true);
 
@@ -91,7 +100,7 @@ function init() {
   if(debug) {
     window.scene = scene;
     stats = Stats.default();
-    // document.body.appendChild( stats.dom );
+    document.body.appendChild( stats.dom );
   }
   
   loadGLTFs();
@@ -130,13 +139,16 @@ function init() {
 function initAudioTracks() {
   audioListener = new AudioListener();
   camera.add(audioListener);
-  for(let name of audioTrackNames) {
-    let path = `${audioPath}${name}.wav`;
+  for(let name of Object.keys(audioTrackNames)) {
+    let fileType = audioTrackNames[name];
+    let path = `${audioPath}${name}${fileType}`;
     asyncLoadAudio(audioListener, path).then((audio) => {
       audio.setLoop( true );
       audio.setRefDistance(5);
       let site = activationSites.filter(site => site.name.includes(name));
       if(site && site.length) {
+        console.log('yessss')
+        console.log('attaching', name, 'to', site.name)
         site = site[0];
         site.audio = audio;
         site.audioAnalyser = new AudioAnalyser(audio, audioParams.fftSize);
@@ -177,7 +189,7 @@ function loadGLTFs() {
       //   loadedObject.receiveShadow = true;
       // }
       let position = getGLTFPosition(gltfScene);
-      console.log(gltfScene, loadedObject, position);
+      // console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
       gltfScene.traverse( function ( node ) {
         if ( node.isMesh || node.isLight ) node.castShadow = true;
@@ -189,7 +201,8 @@ function loadGLTFs() {
 
       let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
       activationSites.push(activationSite);
-      // createGeometries(position);
+      createGeometries(position);
+      
     })
     .catch( (err) => console.error( err ) );
   });
@@ -202,7 +215,12 @@ function initGui() {
   gui = new dat.GUI();
   window.gui = gui;
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
-  gui.add(params, 'activationDistance', 0.0, 100.0);
+  gui.add(params, 'activationDistance', 0.0, 100.0).onChange(() => {
+    activationSiteHelpers.forEach(mesh => mesh.scale.setScalar( params.activationDistance ));
+  });
+  gui.add(params, 'showActivationSites').onChange(() => {
+    activationSiteHelpers.forEach(mesh => mesh.visible = !mesh.visible);
+  });
   gui.add(params, 'useOrbitControls').onChange(() => {
     createControls();
   });
@@ -292,13 +310,20 @@ function createSkyMaterial() {
 }
 
 function createGeometries(position) {
-  const geometry = new SphereBufferGeometry(10, 30, 30);
-  const material = new MeshBasicMaterial();
+  const geometry = new SphereBufferGeometry(1, 100, 100);
+  const material = new MeshBasicMaterial({transparent: true, opacity: .4, side: FrontSide});
+//   const material = new THREE.MeshPhongMaterial({
+//     color: 0xffffff,
+// //      envMap: that.textureCube,
+//     refractionRatio: 0.8
+//   });
   // const material = createSkyMaterial();
   
   const mesh = new Mesh(geometry, material);
   mesh.position.set(position.x, position.y, position.z)
   scene.add(mesh);
+  mesh.scale.setScalar( params.activationDistance );
+  activationSiteHelpers.push(mesh);
 }
 
 function createControls() {

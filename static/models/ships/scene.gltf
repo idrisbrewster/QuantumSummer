@@ -1,0 +1,247 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 16408,
+      "max": [
+        107.14846801757812,
+        9.2405071258544922,
+        60.720504760742188
+      ],
+      "min": [
+        82.417510986328125,
+        1.2489738464355469,
+        1.7177426815032959
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 196896,
+      "componentType": 5126,
+      "count": 16408,
+      "max": [
+        0.99945604801177979,
+        0.99985688924789429,
+        0.99994963407516479
+      ],
+      "min": [
+        -0.99999386072158813,
+        -0.99999541044235229,
+        -0.99999117851257324
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 16408,
+      "max": [
+        1,
+        1,
+        0.9843137264251709,
+        1
+      ],
+      "min": [
+        0.13725490868091583,
+        0.10980392247438431,
+        0.054901961237192154,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 53820,
+      "max": [
+        16407
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "idrisb (https://sketchfab.com/idrisb)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/shipsthrumaya-705de1a045814fc5a8e619cc134cdcd2",
+      "title": "shipsThruMaya"
+    },
+    "generator": "Sketchfab-9.24.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 215280,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 393792,
+      "byteOffset": 215280,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 262528,
+      "byteOffset": 609072,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 871600,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "vertexColor_shader",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Ships_vertexColor_shader_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 2,
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "6cb53d4a89c741be99baf9d153549c8b.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "BakedMesh"
+    },
+    {
+      "children": [
+        6
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        7
+      ],
+      "matrix": [
+        0.36900380430233415,
+        0.026339721856888834,
+        0.49046827819581112,
+        0,
+        0.053684148201511718,
+        0.60762056204616965,
+        -0.073020444151155675,
+        0,
+        -0.4882324498594291,
+        0.086719041073201761,
+        0.36266458783986832,
+        0,
+        34.378467559814453,
+        -10.049403190612793,
+        55.918628692626953,
+        1
+      ],
+      "name": "Ships"
+    },
+    {
+      "mesh": 0,
+      "name": "Ships_vertexColor_shader_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+

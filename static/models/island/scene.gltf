@@ -3,50 +3,50 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 792,
+      "count": 25190,
       "max": [
-        121.14723968505859,
-        18.666910171508789,
-        181.50970458984375
+        63.343868255615234,
+        48.844451904296875,
+        131.65400695800781
       ],
       "min": [
-        -86.686241149902344,
-        -30.137481689453125,
-        -28.870153427124023
+        -22.761524200439453,
+        -18.052036285400391,
+        24.895200729370117
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 9504,
+      "byteOffset": 302280,
       "componentType": 5126,
-      "count": 792,
+      "count": 25190,
       "max": [
-        0.99998307228088379,
-        0.99858421087265015,
-        1
+        0.9990394115447998,
+        0.99998569488525391,
+        0.99999397993087769
       ],
       "min": [
-        -0.99999582767486572,
-        -1,
-        -0.99226528406143188
+        -0.99998360872268677,
+        -0.99997681379318237,
+        -0.99978983402252197
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 792,
+      "count": 25190,
       "max": [
-        0.85098040103912354,
+        0.96470588445663452,
         0.84705883264541626,
-        0.83137255907058716,
+        1,
         1
       ],
       "min": [
-        0.49803921580314636,
-        0.43137255311012268,
-        0.5372549295425415,
+        0.30196079611778259,
+        0,
+        0.49411764740943909,
         1
       ],
       "type": "VEC4"
@@ -54,9 +54,141 @@
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 2976,
+      "count": 104166,
       "max": [
-        791
+        25189
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 604560,
+      "componentType": 5126,
+      "count": 18721,
+      "max": [
+        66.879119873046875,
+        48.844451904296875,
+        131.65400695800781
+      ],
+      "min": [
+        -22.761524200439453,
+        -18.052036285400391,
+        24.895200729370117
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 829212,
+      "componentType": 5126,
+      "count": 18721,
+      "max": [
+        0.99903041124343872,
+        0.99993252754211426,
+        0.99986881017684937
+      ],
+      "min": [
+        -0.99998360872268677,
+        -0.99998188018798828,
+        -0.9999847412109375
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 403040,
+      "componentType": 5126,
+      "count": 18721,
+      "max": [
+        0.96470588445663452,
+        0.84705883264541626,
+        1,
+        1
+      ],
+      "min": [
+        0.30196079611778259,
+        0,
+        0.55686277151107788,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 416664,
+      "componentType": 5125,
+      "count": 78888,
+      "max": [
+        18720
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1053864,
+      "componentType": 5126,
+      "count": 45341,
+      "max": [
+        125.59087371826172,
+        33.490093231201172,
+        50.752994537353516
+      ],
+      "min": [
+        -52.522037506103516,
+        -16.908950805664062,
+        -108.6495361328125
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1597956,
+      "componentType": 5126,
+      "count": 45341,
+      "max": [
+        0.99997878074645996,
+        0.99992877244949341,
+        0.999988853931427
+      ],
+      "min": [
+        -0.99986547231674194,
+        -0.99996572732925415,
+        -0.99984371662139893
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 702576,
+      "componentType": 5126,
+      "count": 45341,
+      "max": [
+        0.80000001192092896,
+        0.80000001192092896,
+        0.7764706015586853,
+        1
+      ],
+      "min": [
+        0.34509804844856262,
+        0.25490197539329529,
+        0.22352941334247589,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 732216,
+      "componentType": 5125,
+      "count": 179760,
+      "max": [
+        45340
       ],
       "min": [
         0
@@ -68,32 +200,32 @@
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
       "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/island-8861d26f18574715914a9efb82a5b2d2",
-      "title": "island"
+      "source": "https://sketchfab.com/3d-models/island-b6888f390a1e4d3894a24fdb03e78080",
+      "title": "Island"
     },
-    "generator": "Sketchfab-9.23.0",
+    "generator": "Sketchfab-9.24.0",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 11904,
+      "byteLength": 1451256,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 19008,
-      "byteOffset": 11904,
+      "byteLength": 2142048,
+      "byteOffset": 1451256,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 12672,
-      "byteOffset": 30912,
+      "byteLength": 1428032,
+      "byteOffset": 3593304,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -101,7 +233,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 43584,
+      "byteLength": 5021336,
       "uri": "scene.bin"
     }
   ],
@@ -129,7 +261,7 @@
   ],
   "meshes": [
     {
-      "name": "Island1_0000_vertexColor_shader_0",
+      "name": "Island2_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -138,6 +270,36 @@
             "POSITION": 0
           },
           "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Island1_vertexColor_shader_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 6,
+            "NORMAL": 5,
+            "POSITION": 4
+          },
+          "indices": 7,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "NewLayer1_vertexColor_shader_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 10,
+            "NORMAL": 9,
+            "POSITION": 8
+          },
+          "indices": 11,
           "material": 0,
           "mode": 4
         }
@@ -185,7 +347,7 @@
         0,
         1
       ],
-      "name": "ee0a1ce9ce6b4958a8baeb17e76e375b.fbx"
+      "name": "424b8808be064eaf931abd4ce71afdb5.fbx"
     },
     {
       "children": [
@@ -207,7 +369,9 @@
     },
     {
       "children": [
-        7
+        7,
+        9,
+        11
       ],
       "name": "Island"
     },
@@ -215,17 +379,49 @@
       "children": [
         8
       ],
-      "name": "Island1"
-    },
-    {
-      "children": [
-        9
-      ],
-      "name": "Island1_0000"
+      "name": "Island2"
     },
     {
       "mesh": 0,
-      "name": "Island1_0000_vertexColor_shader_0"
+      "name": "Island2_vertexColor_shader_0"
+    },
+    {
+      "children": [
+        10
+      ],
+      "name": "Island1"
+    },
+    {
+      "mesh": 1,
+      "name": "Island1_vertexColor_shader_0"
+    },
+    {
+      "children": [
+        12
+      ],
+      "matrix": [
+        -0.093724618246154551,
+        0.017169078202036794,
+        0.41048600709772937,
+        0,
+        -0.0088365303905046533,
+        0.42085010117683169,
+        -0.019620178511939493,
+        0,
+        -0.41074986914179595,
+        -0.012971446637712755,
+        -0.093242318219007608,
+        0,
+        17.427505493164062,
+        1.7757397890090942,
+        49.247474670410156,
+        1
+      ],
+      "name": "NewLayer1"
+    },
+    {
+      "mesh": 2,
+      "name": "NewLayer1_vertexColor_shader_0"
     }
   ],
   "scene": 0,
