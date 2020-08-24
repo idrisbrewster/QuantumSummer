@@ -30,6 +30,8 @@ import {
 import 'regenerator-runtime/runtime'
 //TODO: Remove THREE import on production
 import * as THREE from 'three';
+import * as Stats from 'stats.js';
+// window.stats = Stats.default();
 window.THREE = THREE;
 
 import * as dat from 'dat.gui';
@@ -37,7 +39,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
 
-import {fogMesh, fogShader} from './fog/fog.js';
+// import {fogMesh, fogShader} from './fog/fog.js';
 import {initWater} from './water.js';
 
 import {asyncLoadAudio} from './loadAudio.js';
@@ -50,7 +52,8 @@ import {ActivationSite} from "./ActivationSite.js";
 import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
-const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+// const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+const modelFolderNames = ['house', 'island1_old', 'well', 'ship', 'tree'];
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -64,6 +67,9 @@ let animationTime;
 let time;
 let water;
 let activationSites;
+let audioData;
+
+let stats;
 
 let audioListener;
 
@@ -74,6 +80,7 @@ let audioListener;
 function init() {
   animationTime = 0;
   time = 0;
+  // audioData = new Array(audioParams.fftSize).fill(1.0);
   activationSites = [];
   window.activationSite = activationSites;
   clock = new Clock(true);
@@ -83,26 +90,29 @@ function init() {
   
   if(debug) {
     window.scene = scene;
+    stats = Stats.default();
+    // document.body.appendChild( stats.dom );
   }
   
   loadGLTFs();
   createCamera();
   createLights();
   createRenderer();
-  createSkyBox();
+  
   
   
   
   initGui();
+  createSkyBox();
   // console.log(skyFogShader)
   // scene.add(fogMesh);
   
   water = initWater();
   scene.add(water);
 
-  let pmremGenerator = new PMREMGenerator( renderer );
-  pmremGenerator.compileEquirectangularShader();
-  scene.environment = pmremGenerator.fromScene( fogMesh ).texture;
+  // let pmremGenerator = new PMREMGenerator( renderer );
+  // pmremGenerator.compileEquirectangularShader();
+  // scene.environment = pmremGenerator.fromScene( fogMesh ).texture;
 
   createControls();
   // scene.background = new Color("skyblue");
@@ -110,8 +120,10 @@ function init() {
   scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
 
   renderer.setAnimationLoop(() => {
+    stats.begin();
     update();
     render();
+    stats.end();
   });
 }
 
@@ -177,7 +189,7 @@ function loadGLTFs() {
 
       let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
       activationSites.push(activationSite);
-      createGeometries(position);
+      // createGeometries(position);
     })
     .catch( (err) => console.error( err ) );
   });
@@ -202,20 +214,20 @@ function initGui() {
     scene.fog.color.set(fogParams.fogHorizonColor);
     scene.background = new Color(fogParams.fogHorizonColor);
   });
-  fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
-    fogShader.uniforms.fogNearColor = {
-      value: new Color(fogParams.fogNearColor)
-    };
-  });
-  fogFolder.add(fogParams, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
-    fogShader.uniforms.fogNoiseFreq.value = fogParams.fogNoiseFreq;
-  });
-  fogFolder.add(fogParams, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
-    fogShader.uniforms.fogNoiseSpeed.value = fogParams.fogNoiseSpeed;
-  });
-  fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
-    fogShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
-  });
+  // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
+  //   fogShader.uniforms.fogNearColor = {
+  //     value: new Color(fogParams.fogNearColor)
+  //   };
+  // });
+  // fogFolder.add(fogParams, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
+  //   fogShader.uniforms.fogNoiseFreq.value = fogParams.fogNoiseFreq;
+  // });
+  // fogFolder.add(fogParams, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
+  //   fogShader.uniforms.fogNoiseSpeed.value = fogParams.fogNoiseSpeed;
+  // });
+  // fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
+  //   fogShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
+  // });
 
 
 }
@@ -265,7 +277,8 @@ function createSkyMaterial() {
     uniforms: {
       iTime: { value: 1.0 },
       iMouse: { value: new Vector2(.5, .5) },
-      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) }
+      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) },
+      // audio : { type: "fv1",  value: new Array(audioPath.fftSize) },
     },
     blending: AdditiveBlending,
     transparent: true,
@@ -336,8 +349,9 @@ function update() {
   let avgFreq;
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
-      avgFreq = site.audioAnalyser.getAverageFrequency();
       
+      avgFreq = site.audioAnalyser.getAverageFrequency();
+      // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
 
@@ -352,24 +366,25 @@ function update() {
   if(sky) {
     let mouse = sky.material.uniforms.iMouse.value;
     sky.material.uniforms.iTime.value = time;
+    
     if(avgFreq){
       // if(scene.fog) {
       //   scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
       // }
-      
+      // sky.material.uniforms.audio.value = audioData;
       sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
     }
     
     
     // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
   }
-  if(fogShader) {
-    fogShader.uniforms.time.value += 0.01;
-    let mouse = fogShader.uniforms.iMouse.value;
-    if(avgFreq){
-      fogShader.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
-    }
-  }
+  // if(fogShader) {
+  //   fogShader.uniforms.time.value += 0.01;
+  //   let mouse = fogShader.uniforms.iMouse.value;
+  //   if(avgFreq){
+  //     fogShader.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
+  //   }
+  // }
   
 }
 
