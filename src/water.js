@@ -8,17 +8,17 @@ import {
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { waterParams } from './helpers.js'
 export let initWater = () => {
-  let waterGeometry = new PlaneBufferGeometry( 10000, 10000 );
+  let waterGeometry = new PlaneBufferGeometry( 800, 800 );
   let water = new Water( waterGeometry,
     {
-      textureWidth: 1024,
-      textureHeight: 1024,
+      textureWidth: 512,
+      textureHeight: 512,
       waterNormals: new TextureLoader().load( './models/textures/waternormals.jpg', ( texture ) => {
         console.log('loaded texture', )
         texture.wrapS = texture.wrapT = RepeatWrapping;
       }),
       alpha: .8,
-      transparent: true,
+      transparent: false,
       sunDirection: new Vector3(),
       sunColor: 0xffffff,
       waterColor: 0x001e0f,
