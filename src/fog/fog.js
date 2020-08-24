@@ -1,5 +1,6 @@
 import {
     SphereBufferGeometry,
+    BoxBufferGeometry,
     MeshBasicMaterial,
     Color,
     UniformsUtils,
@@ -12,14 +13,17 @@ import {
 import { fogParsVert, fogVert, fogParsFrag, fogFrag } from "./fogReplace.js";
 import {fogParams} from '../helpers.js';
 
-const geometry = new SphereBufferGeometry(150, 100, 100);
-
+const geometry = new SphereBufferGeometry(400, 100, 100);
+geometry.rotateX(Math.PI/2);
+geometry.rotateZ(Math.PI/2);
+// const geometry = new BoxBufferGeometry( 1, 1, 1 )
+window.geom = geometry;
 let fogShader;
 
 let container = document.querySelector(".container");
 let fogMesh = new Mesh( geometry,
-    new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, fog:true }));
-fogMesh.position.set(15, 0, 75);
+    new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, depthWrite: true }));
+fogMesh.position.set(15, -50, 75);
 fogMesh.material.onBeforeCompile = shader => {
     shader.vertexShader = shader.vertexShader.replace(
         `#include <fog_pars_vertex>`,

@@ -12,11 +12,20 @@ export let params = {
 export let fogParams = {
   fogNearColor: 0xfc4848,
   fogHorizonColor: 0x7d,
-  fogDensity: 0.0074,
+  fogDensity: 0.0021,
   fogNoiseSpeed: 100,
   fogNoiseFreq: .0012,
   fogNoiseImpact: .5
 };
+
+export let waterParams = {
+  alpha: .8,
+  // sunDirection: new Vector3(),
+  // sunColor: 0xffffff,
+  waterColor: 0x001e0f,
+  size: 2.9,
+  distortionScale: 3.
+}
 
 export let audioParams = {
   fftSize: 32

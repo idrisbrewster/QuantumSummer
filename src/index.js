@@ -37,12 +37,13 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
 
 import {fogMesh, fogShader} from './fog/fog.js';
+import {initWater} from './water.js';
 
 import {asyncLoadAudio} from './loadAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams } from './helpers.js';
+import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/starsfragment.glsl";
@@ -60,7 +61,7 @@ const debug = true;
 let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
 let time;
-// let params, fogParams, audioParams;
+let water;
 let activationSites;
 
 let audioListener;
@@ -87,15 +88,23 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  // createSkyBox();
+  createSkyBox();
   
   
   
   initGui();
   // console.log(skyFogShader)
-  scene.add(fogMesh);
+  // scene.add(fogMesh);
+  
+  water = initWater();
+  scene.add(water);
+
+  let pmremGenerator = new PMREMGenerator( renderer );
+  pmremGenerator.compileEquirectangularShader();
+  scene.environment = pmremGenerator.fromScene( fogMesh ).texture;
+
   createControls();
-  scene.background = new Color("skyblue");
+  // scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
   scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
 
@@ -128,10 +137,12 @@ function createSkyBox() {
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
   const geometry = new SphereBufferGeometry(500, 100, 100);
-  // const material = new MeshBasicMaterial();
+  geometry.rotateX(Math.PI/2);
+  geometry.rotateZ(Math.PI/2);
   const material = createSkyMaterial();
   const mesh = new Mesh(geometry, material);
-  mesh.position.set(15, 0, 75);
+  
+  mesh.position.set(15, -50, 75);
   mesh.name = 'sky';
   scene.add(mesh);
 }
@@ -173,13 +184,14 @@ function loadGLTFs() {
 function initGui() {
 
   gui = new dat.GUI();
+  window.gui = gui;
   document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
   gui.add(params, 'activationDistance', 0.0, 100.0);
   gui.add(params, 'useOrbitControls').onChange(() => {
     createControls();
   });
   let fogFolder = gui.addFolder('Fog');
-  fogFolder.add(fogParams, "fogDensity", 0, 0.1).onChange(function() {
+  fogFolder.add(fogParams, "fogDensity", 0, 0.01).onChange(function() {
     scene.fog.density = fogParams.fogDensity;
   }).listen();
   fogFolder.addColor(fogParams, "fogHorizonColor").onChange(function() {
@@ -200,6 +212,8 @@ function initGui() {
   fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
     fogShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
   });
+
+
 }
 
 function createCamera() {
@@ -322,12 +336,22 @@ function update() {
       
     }
   });
+
+  if(water) {
+    water.material.uniforms.time.value += 1.0 / 60.0;
+    water.material.uniforms.alpha.value = waterParams.alpha;
+    water.material.uniforms.distortionScale.value = waterParams.distortionScale;
+    water.material.uniforms.size.value = waterParams.size;
+  }
   
   
   if(sky) {
     let mouse = sky.material.uniforms.iMouse.value;
     if(avgFreq){
-      scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+      // if(scene.fog) {
+      //   scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+      // }
+      
       sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
     }
     
@@ -335,7 +359,6 @@ function update() {
     // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
   }
   if(fogShader) {
-    console.log('found fog')
     fogShader.uniforms.time.value += 0.01;
     let mouse = fogShader.uniforms.iMouse.value;
     if(avgFreq){
@@ -343,9 +366,6 @@ function update() {
     }
   }
   
-  
-  // renderer.shadowMap.needsUpdate = true;
-  // controls.target.z = params.test
 }
 
 function render() {
