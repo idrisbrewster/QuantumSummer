@@ -10,6 +10,7 @@ export let params = {
 };
 
 export let fogParams = {
+  // 0x337d
   fogNearColor: 0xfc4848,
   fogHorizonColor: 0x7d,
   fogDensity: 0.0021,
