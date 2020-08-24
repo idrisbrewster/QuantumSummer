@@ -1,10 +1,10 @@
 // Star Nest by Pablo Roman Andrioli
 // This content is under the MIT License.
 
-#define iterations 16
+#define iterations 17
 #define formuparam 0.53
 
-#define volsteps 20
+#define volsteps 8
 #define stepsize 0.1
 
 #define zoom 0.800
@@ -19,7 +19,7 @@ varying vec2 vUv;
 varying vec3 N;
 uniform float iTime;
 uniform vec2 iMouse;
-uniform float audio[16];
+// uniform float audio[16];
 
 uniform vec3 iResolution;
 
