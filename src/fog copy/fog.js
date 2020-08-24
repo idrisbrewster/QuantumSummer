@@ -4,9 +4,7 @@ import {
     Color,
     UniformsUtils,
     Mesh,
-    BackSide,
-    Vector2,
-    Vector3
+    BackSide
   } from "three";
 
 import { fogParsVert, fogVert, fogParsFrag, fogFrag } from "./fogReplace.js";
@@ -16,9 +14,8 @@ const geometry = new SphereBufferGeometry(150, 100, 100);
 
 let fogShader;
 
-let container = document.querySelector(".container");
 let fogMesh = new Mesh( geometry,
-    new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, fog:true }));
+    new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, }));
 fogMesh.position.set(15, 0, 75);
 fogMesh.material.onBeforeCompile = shader => {
     shader.vertexShader = shader.vertexShader.replace(
@@ -43,12 +40,11 @@ fogMesh.material.onBeforeCompile = shader => {
         fogNoiseFreq: { value: fogParams.fogNoiseFreq },
         fogNoiseSpeed: { value: fogParams.fogNoiseSpeed },
         fogNoiseImpact: { value: fogParams.fogNoiseImpact },
-        time: { value: .25 },
-        iMouse:  { value: new Vector2(.5, .5) },
-        iResolution: { value:  new Vector3(container.clientWidth, container.clientHeight, 1) }
+        time: { value: 0 }
     });
 
     shader.uniforms = UniformsUtils.merge([shader.uniforms, uniforms]);
     fogShader = shader;
 }
+
 export {fogMesh, fogShader};

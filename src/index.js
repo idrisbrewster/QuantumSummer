@@ -315,24 +315,33 @@ function update() {
     controls.update(animationTime+.15);
   }
   let sky = scene.getObjectByName('sky');
+  let avgFreq;
+  activationSites.forEach(site => {
+    if(site && site.audio && site.audio.isPlaying){
+      avgFreq = site.audioAnalyser.getAverageFrequency();
+      
+    }
+  });
+  
+  
+  if(sky) {
+    let mouse = sky.material.uniforms.iMouse.value;
+    if(avgFreq){
+      scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+      sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
+    }
+    
+    
+    // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
+  }
   if(fogShader) {
     console.log('found fog')
     fogShader.uniforms.time.value += 0.01;
-  }
-  activationSites.forEach(site => {
-    if(site && site.audio && site.audio.isPlaying){
-      let avgFreq = site.audioAnalyser.getAverageFrequency();
-      console.log('playing', site.name, avgFreq/1000);
-      scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
-      
-      if(sky) {
-        let mouse = sky.material.uniforms.iMouse.value;
-        sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
-        
-        // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
-      }
+    let mouse = fogShader.uniforms.iMouse.value;
+    if(avgFreq){
+      fogShader.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
     }
-  })
+  }
   
   
   // renderer.shadowMap.needsUpdate = true;
