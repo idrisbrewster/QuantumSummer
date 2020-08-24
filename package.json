@@ -7,9 +7,12 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "gltfFix": "node ./gltfAnimationFix.js ./static/models/house2"
   },
   "dependencies": {
+    "@gltf-transform/core": "^0.5.3",
+    "@gltf-transform/lib": "^0.5.3",
     "dat.gui": "^0.7.7",
     "three": "0.119.1"
   },
