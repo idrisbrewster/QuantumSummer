@@ -347,6 +347,7 @@ function update() {
   
   if(sky) {
     let mouse = sky.material.uniforms.iMouse.value;
+    sky.material.uniforms.iTime.value = time;
     if(avgFreq){
       // if(scene.fog) {
       //   scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);

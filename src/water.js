@@ -38,4 +38,3 @@ export let initWater = () => {
   water.position.set(15, -3, 75);
   return water;
 }
-// scene.add( water );
