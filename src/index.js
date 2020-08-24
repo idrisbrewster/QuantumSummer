@@ -36,6 +36,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
 
+import {fogMesh, fogShader} from './fog/fog.js';
+
 import {asyncLoadAudio} from './loadAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -85,11 +87,13 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  createSkyBox();
+  // createSkyBox();
   
   
   
   initGui();
+  // console.log(skyFogShader)
+  scene.add(fogMesh);
   createControls();
   scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
@@ -176,26 +180,26 @@ function initGui() {
   });
   let fogFolder = gui.addFolder('Fog');
   fogFolder.add(fogParams, "fogDensity", 0, 0.1).onChange(function() {
-    scene.fogParams.density = fogParams.fogDensity;
+    scene.fog.density = fogParams.fogDensity;
   }).listen();
   fogFolder.addColor(fogParams, "fogHorizonColor").onChange(function() {
-    scene.fogParams.color.set(fogParams.fogHorizonColor);
+    scene.fog.color.set(fogParams.fogHorizonColor);
     scene.background = new Color(fogParams.fogHorizonColor);
   });
-  // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
-  //   terrainShader.uniforms.fogNearColor = {
-  //     value: new Color(fogParams.fogNearColor)
-  //   };
-  // });
-  // fogFolder.add(fogParams, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseFreq.value = fogParams.fogNoiseFreq;
-  // });
-  // fogFolder.add(fogParams, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseSpeed.value = fogParams.fogNoiseSpeed;
-  // });
-  // fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
-  //   terrainShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
-  // });
+  fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
+    fogShader.uniforms.fogNearColor = {
+      value: new Color(fogParams.fogNearColor)
+    };
+  });
+  fogFolder.add(fogParams, "fogNoiseFreq", 0, 0.01, 0.0012).onChange(function() {
+    fogShader.uniforms.fogNoiseFreq.value = fogParams.fogNoiseFreq;
+  });
+  fogFolder.add(fogParams, "fogNoiseSpeed", 0, 1000, 100).onChange(function() {
+    fogShader.uniforms.fogNoiseSpeed.value = fogParams.fogNoiseSpeed;
+  });
+  fogFolder.add(fogParams, "fogNoiseImpact", 0, 1).onChange(function() {
+    fogShader.uniforms.fogNoiseImpact.value = fogParams.fogNoiseImpact;
+  });
 }
 
 function createCamera() {
@@ -311,15 +315,20 @@ function update() {
     controls.update(animationTime+.15);
   }
   let sky = scene.getObjectByName('sky');
-  
+  if(fogShader) {
+    console.log('found fog')
+    fogShader.uniforms.time.value += 0.01;
+  }
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
       let avgFreq = site.audioAnalyser.getAverageFrequency();
       console.log('playing', site.name, avgFreq/1000);
       scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
+      
       if(sky) {
         let mouse = sky.material.uniforms.iMouse.value;
         sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
+        
         // sky.material.uniforms.iTime.value += .01 + avgFreq/1000;
       }
     }
