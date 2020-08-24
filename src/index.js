@@ -64,6 +64,7 @@ let animationTime;
 let time;
 let water;
 let activationSites;
+let audioData;
 
 let audioListener;
 
@@ -74,6 +75,7 @@ let audioListener;
 function init() {
   animationTime = 0;
   time = 0;
+  audioData = new Array(audioParams.fftSize).fill(1.0);
   activationSites = [];
   window.activationSite = activationSites;
   clock = new Clock(true);
@@ -265,7 +267,8 @@ function createSkyMaterial() {
     uniforms: {
       iTime: { value: 1.0 },
       iMouse: { value: new Vector2(.5, .5) },
-      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) }
+      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) },
+      audio : { type: "fv1",  value: new Array(audioPath.fftSize) },
     },
     blending: AdditiveBlending,
     transparent: true,
@@ -337,7 +340,7 @@ function update() {
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
       avgFreq = site.audioAnalyser.getAverageFrequency();
-      
+      audioData = site.audioAnalyser.getFrequencyData();
     }
   });
 
@@ -352,11 +355,12 @@ function update() {
   if(sky) {
     let mouse = sky.material.uniforms.iMouse.value;
     sky.material.uniforms.iTime.value = time;
+    
     if(avgFreq){
       // if(scene.fog) {
       //   scene.fog.density = lerp(scene.fog.density, Math.max(.018 - avgFreq/10000), 0.98);
       // }
-      
+      sky.material.uniforms.audio.value = audioData;
       sky.material.uniforms.iMouse.value = new Vector2(mouse.x, mouse.y+avgFreq/1000);
     }
     
