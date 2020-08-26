@@ -54,7 +54,13 @@ import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
-const modelFolderNames = ['house', 'island', 'well', 'ships', 'trees'];
+const modelsInfo = { 
+  'house': new Vector3(-27, 1, 7.3), 
+  'island': new Vector3(0.), 
+  'well': new Vector3(0, 1, -40), 
+  'ships': new Vector3(32, 1, 41),
+  'trees': new Vector3( 37, 4, -6.)
+}
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -176,7 +182,7 @@ function createSkyBox() {
 }
 
 function loadGLTFs() {
-  modelFolderNames.forEach(folderName => {
+  Object.keys(modelsInfo).forEach(folderName => {
     let filePath = `${modelPath}${folderName}/scene.gltf`;
     // let filePath = `${modelPath}${folderName}/scene.glb`;
     GLTFPromiseLoader.load( filePath )
@@ -188,7 +194,8 @@ function loadGLTFs() {
       //   gltfScene.receiveShadow = true;
       //   loadedObject.receiveShadow = true;
       // }
-      let position = getGLTFPosition(gltfScene);
+      // let position = getGLTFPosition(gltfScene);
+      let position = modelsInfo[folderName];
       // console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
       gltfScene.traverse( function ( node ) {
@@ -332,7 +339,7 @@ function createControls() {
   }
   if(params.useOrbitControls) {
     controls = new OrbitControls(camera, renderer.domElement);
-    controls.target = new Vector3(15, 0, 75);
+    // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
     controls = new FirstPersonControls(camera, renderer.domElement);
