@@ -26,7 +26,7 @@ export let waterParams = {
   // sunColor: 0xffffff,
   waterColor: 0x001e0f,
   size: 2.9,
-  distortionScale: 3.
+  distortionScale: 5.7
 }
 
 export let audioParams = {

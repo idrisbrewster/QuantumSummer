@@ -386,11 +386,16 @@ function update() {
       // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
-
+  console.log(waterParams.distortionScale * avgFreq/100 - 2);
   if(water) {
     water.material.uniforms.time.value += 1.0 / 60.0;
     water.material.uniforms.alpha.value = waterParams.alpha;
-    water.material.uniforms.distortionScale.value = waterParams.distortionScale;
+    if(avgFreq) {
+      water.material.uniforms.distortionScale.value = waterParams.distortionScale * (avgFreq/100) - 2.;
+    } else {
+      water.material.uniforms.distortionScale.value = lerp(water.material.uniforms.distortionScale.value, waterParams.distortionScale, .98);
+    }
+    
     water.material.uniforms.size.value = waterParams.size;
   }
   
