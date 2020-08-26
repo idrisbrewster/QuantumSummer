@@ -25,8 +25,7 @@ import {
   AdditiveBlending,
   BackSide,
   Vector2,
-  FrontSide,
-  PCFSoftShadowMap
+  FrontSide
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -55,7 +54,13 @@ import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
-const modelFolderNames = ['house', 'island', 'well', 'ships', 'trees'];
+const modelsInfo = { 
+  'house': new Vector3(-27, 1, 7.3), 
+  'island': new Vector3(0.), 
+  'well': new Vector3(0, 1, -40), 
+  'ships': new Vector3(32, 1, 41),
+  'trees': new Vector3( 37, 4, -6.)
+}
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -106,7 +111,7 @@ function init() {
   
   loadGLTFs();
   createCamera();
-  
+  createLights();
   createRenderer();
   
   
@@ -123,7 +128,7 @@ function init() {
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
   // scene.environment = pmremGenerator.fromScene( fogMesh ).texture;
-  // createLights();
+
   createControls();
   // scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
@@ -171,13 +176,13 @@ function createSkyBox() {
   mesh.rotateX(Math.PI/2);
   mesh.rotateZ(Math.PI/2);
   window.sphereGeom = mesh
-  mesh.position.set(0, -300, 0);
+  mesh.position.set(15, -300, 75);
   mesh.name = 'sky';
   scene.add(mesh);
 }
 
 function loadGLTFs() {
-  modelFolderNames.forEach(folderName => {
+  Object.keys(modelsInfo).forEach(folderName => {
     let filePath = `${modelPath}${folderName}/scene.gltf`;
     // let filePath = `${modelPath}${folderName}/scene.glb`;
     GLTFPromiseLoader.load( filePath )
@@ -185,18 +190,16 @@ function loadGLTFs() {
       
       let gltfScene = loadedObject.scene;
       gltfScene.name = folderName;
-      if(name.includes('island')){
-        gltfScene.receiveShadow = true;
-        loadedObject.receiveShadow = true;
-      }
-      let position = getGLTFPosition(gltfScene);
+      // if(name.includes('island')){
+      //   gltfScene.receiveShadow = true;
+      //   loadedObject.receiveShadow = true;
+      // }
+      // let position = getGLTFPosition(gltfScene);
+      let position = modelsInfo[folderName];
       // console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
       gltfScene.traverse( function ( node ) {
-        if ( node.isMesh || node.isLight ){
-          node.castShadow = true;
-          node.receiveShadow = true;
-        } 
+        if ( node.isMesh || node.isLight ) node.castShadow = true;
       } );
       
 
@@ -266,14 +269,12 @@ function createCamera() {
 
 function createLights() {
   const directionalLight = new DirectionalLight(0xffffff, 5);
-  directionalLight.position.set(12, 50, 78);
-  
-  directionalLight.castShadow = true;
+  directionalLight.position.set(-50, 6, 105);
+
   const directionalLightHelper = new DirectionalLightHelper(directionalLight, 5);
 
-  // const hemisphereLight = new HemisphereLight(0xddeeff, 0x202020, 3);
+  const hemisphereLight = new HemisphereLight(0xddeeff, 0x202020, 3);
   // hemisphereLight.castShadow = true;
-  scene.add(directionalLight, directionalLightHelper)
   // scene.add(directionalLight, directionalLightHelper, hemisphereLight);
 }
 
@@ -284,8 +285,8 @@ function createRenderer() {
   }
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = PCFSoftShadowMap;
+  // renderer.shadowMap.enabled = true;
+  // renderer.shadowMap.type = PCFSoftShadowMap;
 
   // renderer.outputEncoding = sRGBEncoding;
   // renderer.toneMapping = ACESFilmicToneMapping;
@@ -338,7 +339,7 @@ function createControls() {
   }
   if(params.useOrbitControls) {
     controls = new OrbitControls(camera, renderer.domElement);
-    // controls.target = new Vector3(0, 0, 75);
+    // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
     controls = new FirstPersonControls(camera, renderer.domElement);
