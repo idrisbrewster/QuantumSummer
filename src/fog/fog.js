@@ -23,7 +23,7 @@ let fogShader;
 let container = document.querySelector(".container");
 let fogMesh = new Mesh( geometry,
     new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, depthWrite: true }));
-fogMesh.position.set(15, -50, 75);
+fogMesh.position.set(0, -50, 0);
 fogMesh.material.onBeforeCompile = shader => {
     shader.vertexShader = shader.vertexShader.replace(
         `#include <fog_pars_vertex>`,

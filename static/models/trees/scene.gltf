@@ -3,60 +3,60 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 65532,
+      "count": 65534,
       "max": [
-        71.602027893066406,
-        14.484240531921387,
-        88.517166137695312
+        52.076091766357422,
+        14.48424243927002,
+        7.5163779258728027
       ],
       "min": [
-        -8.4683265686035156,
-        -1.2265126705169678,
-        54.309402465820312
+        26.751119613647461,
+        0.19255183637142181,
+        -19.096939086914062
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 786384,
+      "byteOffset": 786408,
       "componentType": 5126,
-      "count": 65532,
+      "count": 65534,
       "max": [
-        0.99998247623443604,
-        0.99979722499847412,
-        0.9999997615814209
+        0.99998235702514648,
+        0.99992245435714722,
+        0.99999815225601196
       ],
       "min": [
-        -0.99998956918716431,
-        -0.99996000528335571,
-        -0.99999254941940308
+        -0.99996256828308105,
+        -0.99995952844619751,
+        -0.9999924898147583
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 65532,
+      "count": 65534,
       "max": [
-        0.9686274528503418,
-        0.89019608497619629,
-        0.94117647409439087,
+        1,
+        1,
+        1,
         1
       ],
       "min": [
-        0.098039217293262482,
-        0.023529412224888802,
-        0.074509806931018829,
-        0.87058824300765991
+        0,
+        0,
+        0,
+        1
       ],
       "type": "VEC4"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 170379,
+      "count": 172347,
       "max": [
-        65531
+        65533
       ],
       "min": [
         0
@@ -65,130 +65,64 @@
     },
     {
       "bufferView": 1,
-      "byteOffset": 1572768,
+      "byteOffset": 1572816,
       "componentType": 5126,
-      "count": 65532,
+      "count": 46118,
       "max": [
-        71.369514465332031,
-        27.544719696044922,
-        85.113967895507812
+        53.438392639160156,
+        7.796600341796875,
+        12.014616012573242
       ],
       "min": [
-        -5.0857772827148438,
-        -1.7279248237609863,
-        59.142627716064453
+        25.348381042480469,
+        -3.1511800289154053,
+        -26.303590774536133
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 2359152,
+      "byteOffset": 2126232,
       "componentType": 5126,
-      "count": 65532,
+      "count": 46118,
       "max": [
-        0.99994486570358276,
-        0.99981820583343506,
-        0.99988311529159546
+        0.99995577335357666,
+        0.9999396800994873,
+        0.99992084503173828
       ],
       "min": [
         -0.99996745586395264,
-        -0.99994927644729614,
-        -0.99993890523910522
+        -0.99998933076858521,
+        -0.99992406368255615
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 1048512,
+      "byteOffset": 1048544,
       "componentType": 5126,
-      "count": 65532,
+      "count": 46118,
       "max": [
-        0.9686274528503418,
-        0.89019608497619629,
-        0.94117647409439087,
+        0.92941176891326904,
+        0.76862746477127075,
+        0.87450981140136719,
         1
       ],
       "min": [
-        0.098039217293262482,
-        0.023529412224888802,
-        0.074509806931018829,
+        0.0039215688593685627,
+        0,
+        0,
         1
       ],
       "type": "VEC4"
     },
     {
       "bufferView": 0,
-      "byteOffset": 681516,
+      "byteOffset": 689388,
       "componentType": 5125,
-      "count": 171312,
+      "count": 116871,
       "max": [
-        65531
-      ],
-      "min": [
-        0
-      ],
-      "type": "SCALAR"
-    },
-    {
-      "bufferView": 1,
-      "byteOffset": 3145536,
-      "componentType": 5126,
-      "count": 41459,
-      "max": [
-        53.294750213623047,
-        22.43134880065918,
-        84.592193603515625
-      ],
-      "min": [
-        35.447563171386719,
-        4.1188220977783203,
-        63.940250396728516
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 1,
-      "byteOffset": 3643044,
-      "componentType": 5126,
-      "count": 41459,
-      "max": [
-        0.9999663233757019,
-        0.99977052211761475,
-        0.99999123811721802
-      ],
-      "min": [
-        -0.99996477365493774,
-        -0.99998652935028076,
-        -0.99997133016586304
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 2097024,
-      "componentType": 5126,
-      "count": 41459,
-      "max": [
-        0.9686274528503418,
-        0.89019608497619629,
-        0.94117647409439087,
-        1
-      ],
-      "min": [
-        0.098039217293262482,
-        0.023529412224888802,
-        0.074509806931018829,
-        1
-      ],
-      "type": "VEC4"
-    },
-    {
-      "bufferView": 0,
-      "byteOffset": 1366764,
-      "componentType": 5125,
-      "count": 107895,
-      "max": [
-        41458
+        46117
       ],
       "min": [
         0
@@ -199,9 +133,9 @@
   "asset": {
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/treesthrumaya-2a54a838ac5b4812855943c68f60a0cc",
-      "title": "TreesThruMaya"
+      "license": "COPYRIGHT TO idrisb",
+      "source": "https://sketchfab.com/3d-models/trees-5acc8d3be7dc43ff828a28856510c92b",
+      "title": "trees"
     },
     "generator": "Sketchfab-9.24.0",
     "version": "2.0"
@@ -209,23 +143,23 @@
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 1798344,
+      "byteLength": 1156872,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 4140552,
-      "byteOffset": 1798344,
+      "byteLength": 2679648,
+      "byteOffset": 1156872,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 2760368,
-      "byteOffset": 5938896,
+      "byteLength": 1786432,
+      "byteOffset": 3836520,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -233,7 +167,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 8699264,
+      "byteLength": 5622952,
       "uri": "scene.bin"
     }
   ],
@@ -242,7 +176,6 @@
   ],
   "materials": [
     {
-      "alphaMode": "BLEND",
       "doubleSided": true,
       "extensions": {
         "KHR_materials_unlit": {}
@@ -253,7 +186,7 @@
           1,
           1,
           1,
-          0.99885844748858454
+          1
         ],
         "metallicFactor": 0,
         "roughnessFactor": 1
@@ -262,7 +195,7 @@
   ],
   "meshes": [
     {
-      "name": "NewLayer2_vertexColor_shader_0",
+      "name": "Trees_0000_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -277,7 +210,7 @@
       ]
     },
     {
-      "name": "NewLayer2_vertexColor_shader_0",
+      "name": "Trees_0000_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -286,21 +219,6 @@
             "POSITION": 4
           },
           "indices": 7,
-          "material": 0,
-          "mode": 4
-        }
-      ]
-    },
-    {
-      "name": "NewLayer2_vertexColor_shader_0",
-      "primitives": [
-        {
-          "attributes": {
-            "COLOR_0": 10,
-            "NORMAL": 9,
-            "POSITION": 8
-          },
-          "indices": 11,
           "material": 0,
           "mode": 4
         }
@@ -348,7 +266,7 @@
         0,
         1
       ],
-      "name": "320ece97aaf84caf90d3ca6fe65c7997.fbx"
+      "name": "a99c4934db8b4632ae19d312cb53979e.fbx"
     },
     {
       "children": [
@@ -370,23 +288,24 @@
     },
     {
       "children": [
-        7,
+        7
+      ],
+      "name": "Trees"
+    },
+    {
+      "children": [
         8,
         9
       ],
-      "name": "NewLayer2"
+      "name": "Trees_0000"
     },
     {
       "mesh": 0,
-      "name": "NewLayer2_vertexColor_shader_0"
+      "name": "Trees_0000_vertexColor_shader_0"
     },
     {
       "mesh": 1,
-      "name": "NewLayer2_vertexColor_shader_0"
-    },
-    {
-      "mesh": 2,
-      "name": "NewLayer2_vertexColor_shader_0"
+      "name": "Trees_0000_vertexColor_shader_0"
     }
   ],
   "scene": 0,

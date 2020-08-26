@@ -1,0 +1,247 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 10045,
+      "max": [
+        41.527912139892578,
+        1020.4398803710938,
+        1.3723013401031494
+      ],
+      "min": [
+        -3.0012490749359131,
+        -14.079558372497559,
+        -33.504066467285156
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 120540,
+      "componentType": 5126,
+      "count": 10045,
+      "max": [
+        0.99940335750579834,
+        0.99980682134628296,
+        0.99928128719329834
+      ],
+      "min": [
+        -0.9999043345451355,
+        -0.99989622831344604,
+        -0.99973404407501221
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 10045,
+      "max": [
+        0.92156863212585449,
+        0.99607843160629272,
+        0.93333333730697632,
+        1
+      ],
+      "min": [
+        0.094117648899555206,
+        0.047058824449777603,
+        0.078431375324726105,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 32028,
+      "max": [
+        10044
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "idrisb (https://sketchfab.com/idrisb)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/well-thru-maya-3d9249854b9b48d0a751b1df6b6e6a0c",
+      "title": "Well Thru Maya"
+    },
+    "generator": "Sketchfab-9.24.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 128112,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 241080,
+      "byteOffset": 128112,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 160720,
+      "byteOffset": 369192,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 529912,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "vertexColor_shader",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Well1_vertexColor_shader_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 2,
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "567695a9212f49d7ae170f8aa372639e.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "BakedMesh"
+    },
+    {
+      "children": [
+        6
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        7
+      ],
+      "matrix": [
+        -0.091612587907067305,
+        0.016782182904564073,
+        0.40123594113870631,
+        0,
+        -0.0086374042630661136,
+        0.411366486321672,
+        -0.019178049079449391,
+        0,
+        -0.40149385720344716,
+        -0.012679142552048212,
+        -0.09114115623349639,
+        0,
+        22.200681686401367,
+        0.64617437124252319,
+        39.021846771240234,
+        1
+      ],
+      "name": "Well1"
+    },
+    {
+      "mesh": 0,
+      "name": "Well1_vertexColor_shader_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+

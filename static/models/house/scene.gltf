@@ -5,14 +5,14 @@
       "componentType": 5126,
       "count": 65532,
       "max": [
-        41.883506774902344,
-        4.1755080223083496,
-        128.39466857910156
+        -13.318694114685059,
+        10.599879264831543,
+        28.396862030029297
       ],
       "min": [
-        -1.178404688835144,
-        -4.1030616760253906,
-        69.473114013671875
+        -33.651008605957031,
+        -1.880807638168335,
+        -20.369029998779297
       ],
       "type": "VEC3"
     },
@@ -22,14 +22,14 @@
       "componentType": 5126,
       "count": 65532,
       "max": [
-        0.99999183416366577,
-        0.99999672174453735,
-        0.99996912479400635
+        0.99997705221176147,
+        0.99999517202377319,
+        0.99999421834945679
       ],
       "min": [
-        -0.99999028444290161,
-        -0.99997556209564209,
-        -0.99997818470001221
+        -0.99994343519210815,
+        -1,
+        -0.99996113777160645
       ],
       "type": "VEC3"
     },
@@ -38,23 +38,23 @@
       "componentType": 5126,
       "count": 65532,
       "max": [
-        0.92941176891326904,
-        0.85882353782653809,
-        0.78039216995239258,
+        1,
+        1,
+        1,
         1
       ],
       "min": [
         0,
         0,
         0,
-        0.15686275064945221
+        0.47843137383460999
       ],
       "type": "VEC4"
     },
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 165333,
+      "count": 173523,
       "max": [
         65531
       ],
@@ -67,33 +67,33 @@
       "bufferView": 1,
       "byteOffset": 1572768,
       "componentType": 5126,
-      "count": 25903,
+      "count": 24692,
       "max": [
-        43.441310882568359,
-        6.6921639442443848,
-        123.49390411376953
+        -16.869087219238281,
+        7.5111293792724609,
+        12.097748756408691
       ],
       "min": [
-        -1.3023848533630371,
-        -3.661341667175293,
-        67.513076782226562
+        -34.034294128417969,
+        -1.0533899068832397,
+        -18.985315322875977
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 1883604,
+      "byteOffset": 1869072,
       "componentType": 5126,
-      "count": 25903,
+      "count": 24692,
       "max": [
-        0.99999332427978516,
-        0.99998432397842407,
-        0.99997669458389282
+        0.99991452693939209,
+        0.99999707937240601,
+        0.999958336353302
       ],
       "min": [
-        -0.99999332427978516,
-        -0.99989771842956543,
-        -0.99997532367706299
+        -0.99987214803695679,
+        -0.99999380111694336,
+        -0.99996393918991089
       ],
       "type": "VEC3"
     },
@@ -101,28 +101,28 @@
       "bufferView": 2,
       "byteOffset": 1048512,
       "componentType": 5126,
-      "count": 25903,
+      "count": 24692,
       "max": [
-        0.92941176891326904,
-        0.85882353782653809,
-        0.78039216995239258,
+        1,
+        1,
+        1,
         1
       ],
       "min": [
-        0.098039217293262482,
-        0.054901961237192154,
-        0.039215687662363052,
-        0.15686275064945221
+        0,
+        0,
+        0,
+        0.47843137383460999
       ],
       "type": "VEC4"
     },
     {
       "bufferView": 0,
-      "byteOffset": 661332,
+      "byteOffset": 694092,
       "componentType": 5125,
-      "count": 65505,
+      "count": 64125,
       "max": [
-        25902
+        24691
       ],
       "min": [
         0
@@ -133,9 +133,9 @@
   "asset": {
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/houses-thru-maya-e27536e08c7a4238ade848b8653ccadb",
-      "title": "Houses Thru Maya"
+      "license": "COPYRIGHT TO idrisb",
+      "source": "https://sketchfab.com/3d-models/houses-1d37d637dea84eea9de80677cb91d60d",
+      "title": "houses"
     },
     "generator": "Sketchfab-9.24.0",
     "version": "2.0"
@@ -143,23 +143,23 @@
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 923352,
+      "byteLength": 950592,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 2194440,
-      "byteOffset": 923352,
+      "byteLength": 2165376,
+      "byteOffset": 950592,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 1462960,
-      "byteOffset": 3117792,
+      "byteLength": 1443584,
+      "byteOffset": 3115968,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -167,7 +167,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 4580752,
+      "byteLength": 4559552,
       "uri": "scene.bin"
     }
   ],
@@ -195,7 +195,7 @@
   ],
   "meshes": [
     {
-      "name": "houses_vertexColor_shader_0",
+      "name": "Houses_0000_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "name": "houses_vertexColor_shader_0",
+      "name": "Houses_0000_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -266,7 +266,7 @@
         0,
         1
       ],
-      "name": "b57879f063a44254a382549f499a1de3.fbx"
+      "name": "a8cbf369e4f14e479731aba4d1784e02.fbx"
     },
     {
       "children": [
@@ -288,36 +288,24 @@
     },
     {
       "children": [
-        7,
-        8
+        7
       ],
-      "matrix": [
-        1.2235137101314568,
-        0.06146785353671233,
-        -0.69991482330551391,
-        -0,
-        0.057343036030349806,
-        1.392067776992481,
-        0.22249480052099194,
-        -0,
-        -0.70026483070337142,
-        0.22139074737134629,
-        -1.204682597051679,
-        -0,
-        66.563499450683594,
-        -23.237333297729492,
-        222.8583984375,
-        1
+      "name": "Houses"
+    },
+    {
+      "children": [
+        8,
+        9
       ],
-      "name": "houses"
+      "name": "Houses_0000"
     },
     {
       "mesh": 0,
-      "name": "houses_vertexColor_shader_0"
+      "name": "Houses_0000_vertexColor_shader_0"
     },
     {
       "mesh": 1,
-      "name": "houses_vertexColor_shader_0"
+      "name": "Houses_0000_vertexColor_shader_0"
     }
   ],
   "scene": 0,

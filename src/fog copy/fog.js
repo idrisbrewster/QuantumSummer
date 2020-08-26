@@ -16,7 +16,7 @@ let fogShader;
 
 let fogMesh = new Mesh( geometry,
     new MeshBasicMaterial({ color: new Color(0xefd1b5), side: BackSide, }));
-fogMesh.position.set(15, 0, 75);
+// fogMesh.position.set(0, 0, 0);
 fogMesh.material.onBeforeCompile = shader => {
     shader.vertexShader = shader.vertexShader.replace(
         `#include <fog_pars_vertex>`,
