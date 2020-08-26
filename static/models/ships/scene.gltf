@@ -3,50 +3,50 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 16408,
+      "count": 12266,
       "max": [
-        107.14846801757812,
-        9.2405071258544922,
-        60.720504760742188
+        50.151760101318359,
+        -1.3974282741546631,
+        49.253070831298828
       ],
       "min": [
-        82.417510986328125,
-        1.2489738464355469,
-        1.7177426815032959
+        19.85682487487793,
+        -2.375617504119873,
+        28.951726913452148
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 196896,
+      "byteOffset": 147192,
       "componentType": 5126,
-      "count": 16408,
+      "count": 12266,
       "max": [
-        0.99945604801177979,
-        0.99985688924789429,
-        0.99994963407516479
+        0.99976247549057007,
+        0.99996262788772583,
+        0.99993807077407837
       ],
       "min": [
-        -0.99999386072158813,
-        -0.99999541044235229,
-        -0.99999117851257324
+        -0.99999171495437622,
+        -0.99999666213989258,
+        -0.99972933530807495
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 16408,
+      "count": 12266,
       "max": [
         1,
         1,
-        0.9843137264251709,
+        0.9686274528503418,
         1
       ],
       "min": [
-        0.13725490868091583,
-        0.10980392247438431,
-        0.054901961237192154,
+        0.011764706112444401,
+        0.0078431377187371254,
+        0,
         1
       ],
       "type": "VEC4"
@@ -54,9 +54,9 @@
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 53820,
+      "count": 40260,
       "max": [
-        16407
+        12265
       ],
       "min": [
         0
@@ -67,9 +67,9 @@
   "asset": {
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/shipsthrumaya-705de1a045814fc5a8e619cc134cdcd2",
-      "title": "shipsThruMaya"
+      "license": "COPYRIGHT TO idrisb",
+      "source": "https://sketchfab.com/3d-models/ships-c3c47ad3a9054528b197fc43aae5de42",
+      "title": "ships"
     },
     "generator": "Sketchfab-9.24.0",
     "version": "2.0"
@@ -77,23 +77,23 @@
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 215280,
+      "byteLength": 161040,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 393792,
-      "byteOffset": 215280,
+      "byteLength": 294384,
+      "byteOffset": 161040,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 262528,
-      "byteOffset": 609072,
+      "byteLength": 196256,
+      "byteOffset": 455424,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -101,7 +101,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 871600,
+      "byteLength": 651680,
       "uri": "scene.bin"
     }
   ],
@@ -129,7 +129,7 @@
   ],
   "meshes": [
     {
-      "name": "Ships_vertexColor_shader_0",
+      "name": "Ships_0000_vertexColor_shader_0",
       "primitives": [
         {
           "attributes": {
@@ -185,7 +185,7 @@
         0,
         1
       ],
-      "name": "6cb53d4a89c741be99baf9d153549c8b.fbx"
+      "name": "001a730cab614a7ab21a22ae222221cf.fbx"
     },
     {
       "children": [
@@ -209,29 +209,17 @@
       "children": [
         7
       ],
-      "matrix": [
-        0.36900380430233415,
-        0.026339721856888834,
-        0.49046827819581112,
-        0,
-        0.053684148201511718,
-        0.60762056204616965,
-        -0.073020444151155675,
-        0,
-        -0.4882324498594291,
-        0.086719041073201761,
-        0.36266458783986832,
-        0,
-        34.378467559814453,
-        -10.049403190612793,
-        55.918628692626953,
-        1
-      ],
       "name": "Ships"
     },
     {
+      "children": [
+        8
+      ],
+      "name": "Ships_0000"
+    },
+    {
       "mesh": 0,
-      "name": "Ships_vertexColor_shader_0"
+      "name": "Ships_0000_vertexColor_shader_0"
     }
   ],
   "scene": 0,

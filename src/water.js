@@ -35,6 +35,6 @@ export let initWater = () => {
   folder.add(waterParams, 'distortionScale', 0.0, 80.0);
   folder.add(waterParams, 'size', 0.1, 10.0);
   folder.add(waterParams, 'alpha', 0.3, 1.0);
-  water.position.set(15, -3, 75);
+  water.position.set(0, -3, 0);
   return water;
 }
