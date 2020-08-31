@@ -343,8 +343,9 @@ function createControls() {
     // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
-    controls = new FirstPersonControls(camera, renderer.domElement);
-    // controls = new PointerLockControls(camera, renderer.domElement);
+    // controls = new FirstPersonControls(camera, renderer.domElement);
+    controls = new PointerLockControls(camera, renderer.domElement);
+    scene.add(controls.getObject());
   }
   if(debug) {
     window.controls = controls;
@@ -433,6 +434,15 @@ function render() {
 // we have to initialize the audio on a click action
 let instructions = document.querySelector('.instructions');
 let blocker = document.querySelector('.blocker');
+controls.addEventListener( 'lock', () => {
+  instructions.style.display = 'none';
+  blocker.style.display = 'none';
+} );
+controls.addEventListener( 'unlock', () => {
+  instructions.style.display = 'block';
+  blocker.style.display = '';
+} );
+
 console.log(instructions)
 let loadPage = () => {
   console.log('click')
@@ -456,6 +466,7 @@ function onWindowResize() {
   
 }
 window.addEventListener("resize", onWindowResize, false);
+
 
 
 init();
