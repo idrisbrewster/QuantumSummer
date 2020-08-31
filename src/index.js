@@ -65,10 +65,10 @@ const modelsInfo = {
 const modelPath = './models/';
 const audioPath = './models/audio/';
 const audioTrackNames = {
-  'house' : '.wav',
-  'ship' : '.wav',
-  'tree' : '.mp3',
-  'well' : '.wav'
+  'house' : '.ogg',
+  'ship' : '.ogg',
+  'tree' : '.ogg',
+  'well' : '.ogg'
 };
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
