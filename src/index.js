@@ -158,6 +158,7 @@ function initAudioTracks() {
         console.log('attaching', name, 'to', site[0].name)
         site = site[0];
         site.audio = audio;
+        site.audio.setVolume(0);
         site.audioAnalyser = new AudioAnalyser(audio, audioParams.fftSize);
         site.gltfScene.add(audio);
       }
