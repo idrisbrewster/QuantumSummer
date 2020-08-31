@@ -12,9 +12,6 @@ export class ActivationSite {
     this.gltfScene = gltfScene;
     this.name = gltfScene.name;
     this.audio = audio;
-    if(this.audio){
-      this.audio.setVolume(0);
-    }
     
     this.autoPlayAnimation = autoPlayAnimation;
     this.audioFade = .05;
