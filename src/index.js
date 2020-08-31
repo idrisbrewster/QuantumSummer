@@ -39,6 +39,7 @@ import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
+import { PointerLockControlsHandler } from './PointerLockControlsHandler.js';
 
 // import {fogMesh, fogShader} from './fog/fog.js';
 import {initWater} from './water.js';
@@ -86,6 +87,7 @@ let activationSiteHelpers;
 let stats;
 
 let audioListener;
+let objectsToRaycast;
 
 
 
@@ -97,6 +99,7 @@ function init() {
   // audioData = new Array(audioParams.fftSize).fill(1.0);
   activationSites = [];
   activationSiteHelpers = [];
+  objectsToRaycast = [];
   window.activationSite = activationSites;
   clock = new Clock(true);
 
@@ -123,6 +126,7 @@ function init() {
   // scene.add(fogMesh);
   
   water = initWater();
+  objectsToRaycast.push(water);
   scene.add(water);
 
   // let pmremGenerator = new PMREMGenerator( renderer );
@@ -200,6 +204,7 @@ function loadGLTFs() {
       let position = modelsInfo[folderName];
       // console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
+      objectsToRaycast.push(gltfScene);
       gltfScene.traverse( function ( node ) {
         if ( node.isMesh || node.isLight ) node.castShadow = true;
       } );
@@ -345,8 +350,9 @@ function createControls() {
     controls.update();
   } else {
     // controls = new FirstPersonControls(camera, renderer.domElement);
-    controls = new PointerLockControls(camera, renderer.domElement);
-    scene.add(controls.getObject());
+    // controls = new PointerLockControls(camera, renderer.domElement);
+    controls = new PointerLockControlsHandler(camera, document.body);
+    scene.add(controls.controls.getObject());
   }
   if(debug) {
     window.controls = controls;
@@ -377,9 +383,14 @@ function update() {
   animationTime = clock.getDelta();
   time += 0.01;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
-  if(controls.update){
-    controls.update(animationTime+.15);
+  // if(controls.update){
+  //   controls.update(animationTime+.15);
+  // }
+  // if(controls.isLocked) {
+  if(objectsToRaycast.length && controls.controls.isLocked) {  
+    controls.update(time, objectsToRaycast, scene);
   }
+  // }
   let sky = scene.getObjectByName('sky');
   let avgFreq;
   activationSites.forEach(site => {
@@ -435,14 +446,14 @@ function render() {
 // we have to initialize the audio on a click action
 let instructions = document.querySelector('.instructions');
 let blocker = document.querySelector('.blocker');
-controls.addEventListener( 'lock', () => {
-  instructions.style.display = 'none';
-  blocker.style.display = 'none';
-} );
-controls.addEventListener( 'unlock', () => {
-  instructions.style.display = 'block';
-  blocker.style.display = '';
-} );
+// controls.addEventListener( 'lock', () => {
+//   instructions.style.display = 'none';
+//   blocker.style.display = 'none';
+// } );
+// controls.addEventListener( 'unlock', () => {
+//   instructions.style.display = 'block';
+//   blocker.style.display = '';
+// } );
 
 console.log(instructions)
 let loadPage = () => {
@@ -451,6 +462,9 @@ let loadPage = () => {
   instructions.removeEventListener('click', loadPage, false);
   instructions.removeEventListener('touch', loadPage, false);
   blocker.style.display = 'none';
+  if(!params.useOrbitControls) {
+    controls.controls.lock();
+  }
   instructions.style.display = 'none';
 }
 instructions.addEventListener('click', loadPage ,false);

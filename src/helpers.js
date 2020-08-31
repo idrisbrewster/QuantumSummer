@@ -5,7 +5,7 @@ import {
 
 export let params = {
   activationDistance : 24.0,
-  useOrbitControls: true,
+  useOrbitControls: false,
   showActivationSites: true
   // useOrbitControls: false
 };
