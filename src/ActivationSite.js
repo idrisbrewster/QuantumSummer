@@ -2,6 +2,8 @@ import {
   LoopRepeat
 } from "three";
 
+import { lerp } from './helpers.js';
+
 export class ActivationSite {
   constructor(position, object, gltfScene, animationMixer, audio, autoPlayAnimation=false) {
     this.position = position;
@@ -10,8 +12,12 @@ export class ActivationSite {
     this.gltfScene = gltfScene;
     this.name = gltfScene.name;
     this.audio = audio;
+    if(this.audio){
+      this.audio.setVolume(0);
+    }
+    
     this.autoPlayAnimation = autoPlayAnimation;
-
+    this.audioFade = .05;
     this.activatedAutoPlay = false;
     this.activated = false;
     this.audioAnalyser = null;
@@ -30,6 +36,10 @@ export class ActivationSite {
     }
     let dist = this.position.distanceTo(inputPosition);
     if(dist <= threshold) {
+      if(this.audio) {
+        this.audio.setVolume(lerp(this.audio.getVolume(), 1.0, this.audioFade));
+      }
+      
       if(!this.activated) {
         console.log('Activate', this.name, dist);
         //play animation
@@ -42,16 +52,23 @@ export class ActivationSite {
       }
     } else {
       if(this.activated) {
-        console.log('Deactivating', this.name, dist);
+        // console.log('Deactivating', this.name, dist);
         // pause animation
         // pause audio
         if(this.audio) {
-          this.audio.pause();
+          this.audio.setVolume(lerp(this.audio.getVolume(), 0.0, this.audioFade));
+          if(this.audio.getVolume() <= 0.01) {
+            this.audio.pause();
+            this.activated = false;
+            this.audio.setVolume(0.0);
+          }
+          // this.audio.pause();
         }
 
         this.shouldPlayAnimation(false)
       }
-      this.activated = false;
+      
+      // this.activated = false;
     }
   }
 

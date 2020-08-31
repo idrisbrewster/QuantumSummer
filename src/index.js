@@ -144,6 +144,8 @@ function init() {
 
 function initAudioTracks() {
   audioListener = new AudioListener();
+  
+  
   camera.add(audioListener);
   for(let name of Object.keys(audioTrackNames)) {
     let fileType = audioTrackNames[name];
@@ -153,8 +155,7 @@ function initAudioTracks() {
       audio.setRefDistance(5);
       let site = activationSites.filter(site => site.name.includes(name));
       if(site && site.length) {
-        console.log('yessss')
-        console.log('attaching', name, 'to', site.name)
+        console.log('attaching', name, 'to', site[0].name)
         site = site[0];
         site.audio = audio;
         site.audioAnalyser = new AudioAnalyser(audio, audioParams.fftSize);
@@ -386,7 +387,7 @@ function update() {
       // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
-  console.log(waterParams.distortionScale * avgFreq/100 - 2);
+  // console.log(waterParams.distortionScale * avgFreq/100 - 2);
   if(water) {
     water.material.uniforms.time.value += 1.0 / 60.0;
     water.material.uniforms.alpha.value = waterParams.alpha;
