@@ -25,8 +25,8 @@ export let waterParams = {
   // sunDirection: new Vector3(),
   // sunColor: 0xffffff,
   waterColor: 0x001e0f,
-  size: 2.9,
-  distortionScale: 5.7
+  size: 2.8,
+  distortionScale: 30
 }
 
 export let audioParams = {
