@@ -62,6 +62,11 @@ const modelsInfo = {
   'ships': new Vector3(32, 1, 41),
   'trees': new Vector3( 37, 4, -6.)
 }
+
+const zoneColors = {
+
+  
+}
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -454,12 +459,14 @@ function render() {
 // we have to initialize the audio on a click action
 let instructions = document.querySelector('.instructions');
 let blocker = document.querySelector('.blocker');
-// document.addEventListener('keypress', (e) => {
-//   console.log('test')
-//     instructions.style.display = 'block';
-//     blocker.style.display = '';
-//     controls.activeLook = false;
-// }, false);
+document.addEventListener('keydown', (evt) => {
+  evt = evt || window.event;
+  if (evt.key === 'Escape') {
+    instructions.style.display = '-webkit-box';
+    blocker.style.display = 'block';
+    controls.activeLook = false;
+  }
+}, false);
 // controls.addEventListener( 'lock', () => {
 //   instructions.style.display = 'none';
 //   blocker.style.display = 'none';
@@ -468,6 +475,11 @@ let blocker = document.querySelector('.blocker');
 //   instructions.style.display = 'block';
 //   blocker.style.display = '';
 // } );
+function hideInstructions() {
+  blocker.style.display = 'none';
+  instructions.style.display = 'none';
+  controls.activeLook = true;
+}
 
 console.log(instructions)
 let loadPage = () => {
@@ -475,15 +487,22 @@ let loadPage = () => {
   initAudioTracks();
   instructions.removeEventListener('click', loadPage, false);
   instructions.removeEventListener('touch', loadPage, false);
+
   blocker.style.display = 'none';
   if(!params.useOrbitControls) {
     // controls.controls.lock();
     // controls.activeLook = false;
   }
   instructions.style.display = 'none';
+
+  instructions.addEventListener('click', hideInstructions, false);
+  instructions.addEventListener('touch', hideInstructions, false);
+  
 }
 instructions.addEventListener('click', loadPage ,false);
 instructions.addEventListener('touch', loadPage ,false);
+
+
 
 
 function onWindowResize() {
