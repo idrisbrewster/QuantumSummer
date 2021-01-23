@@ -45,6 +45,7 @@ import { PointerLockControlsHandler } from './PointerLockControlsHandler.js';
 import {initWater} from './water.js';
 
 import {asyncLoadAudio} from './loadAudio.js';
+import {asyncLoadAmbientAudio} from './loadAmbientAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
@@ -84,6 +85,11 @@ const audioTrackNames = {
   'tree' : '.ogg',
   'well' : '.ogg'
 };
+
+const ambientAudio = [
+  {path: './models/audio/ambient_waves.mp3', volume: .05},
+  {path: './models/audio/ambient_beach.mp3', volume: .1}
+];
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
@@ -102,7 +108,7 @@ let stats;
 let audioListener;
 let objectsToRaycast;
 
-
+let moon;
 
 
 
@@ -135,6 +141,7 @@ function init() {
   
   initGui();
   createSkyBox();
+  createMoon();
   // console.log(skyFogShader)
   // scene.add(fogMesh);
   
@@ -164,6 +171,9 @@ function initAudioTracks() {
   
   
   camera.add(audioListener);
+
+  ambientAudio.forEach(audio => asyncLoadAmbientAudio(audio.path, audioListener, audio.volume));
+
   for(let name of Object.keys(audioTrackNames)) {
     let fileType = audioTrackNames[name];
     let path = `${audioPath}${name}${fileType}`;
@@ -183,6 +193,16 @@ function initAudioTracks() {
   }
 }
 
+function createMoon() {
+  const geometry = new SphereBufferGeometry(4, 100, 100);
+  const material = new MeshStandardMaterial({color: 0xffffff, emissive:0xff0000, emissiveIntensity: 2, fog:true})
+  const mesh = new Mesh(geometry, material)
+  window.moon = mesh;
+  mesh.position.set(250, 10, 10);
+  mesh.name = 'moon';
+  scene.add(mesh);
+}
+
 function createSkyBox() {
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
@@ -194,7 +214,7 @@ function createSkyBox() {
   const mesh = new Mesh(geometry, material);
   mesh.rotateX(Math.PI/2);
   mesh.rotateZ(Math.PI/2);
-  window.sphereGeom = mesh
+  window.sphereGeom = mesh;
   mesh.position.set(15, -300, 75);
   mesh.name = 'sky';
   scene.add(mesh);
