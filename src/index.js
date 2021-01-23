@@ -388,8 +388,7 @@ function update() {
   let avgFreq;
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
-      fogColor = fogColor.lerp(site.zoneColor, 0.1);
-      console.log(fogColor, fogColor.getHex(), site.zoneColor)
+      fogColor = fogColor.lerp(site.zoneColor, 0.01);
       fogParams.fogHorizonColor = fogColor.getHex();
       avgFreq = site.audioAnalyser.getAverageFrequency();
       scene.fog.color.set(fogParams.fogHorizonColor);

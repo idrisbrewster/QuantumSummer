@@ -3,32 +3,32 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 65534,
+      "count": 65532,
       "max": [
         52.076091766357422,
-        14.48424243927002,
-        7.5163779258728027
+        13.477437973022461,
+        7.2445626258850098
       ],
       "min": [
-        26.751119613647461,
-        0.19255183637142181,
-        -19.096939086914062
+        26.934284210205078,
+        -0.48630794882774353,
+        -18.851348876953125
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 786408,
+      "byteOffset": 786384,
       "componentType": 5126,
-      "count": 65534,
+      "count": 65532,
       "max": [
         0.99998235702514648,
         0.99992245435714722,
-        0.99999815225601196
+        0.99999809265136719
       ],
       "min": [
         -0.99996256828308105,
-        -0.99995952844619751,
+        -0.99996465444564819,
         -0.9999924898147583
       ],
       "type": "VEC3"
@@ -36,7 +36,7 @@
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 65534,
+      "count": 65532,
       "max": [
         1,
         1,
@@ -54,9 +54,9 @@
     {
       "bufferView": 0,
       "componentType": 5125,
-      "count": 172347,
+      "count": 179388,
       "max": [
-        65533
+        65531
       ],
       "min": [
         0
@@ -65,47 +65,113 @@
     },
     {
       "bufferView": 1,
-      "byteOffset": 1572816,
+      "byteOffset": 1572768,
       "componentType": 5126,
-      "count": 46118,
+      "count": 6770,
+      "max": [
+        41.213199615478516,
+        4.2247862815856934,
+        6.9327893257141113
+      ],
+      "min": [
+        32.840564727783203,
+        1.7808023691177368,
+        -9.8987960815429688
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1654008,
+      "componentType": 5126,
+      "count": 6770,
+      "max": [
+        0.99974048137664795,
+        0.99996858835220337,
+        0.99972438812255859
+      ],
+      "min": [
+        -0.99951565265655518,
+        -0.99935406446456909,
+        -0.99988865852355957
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1048512,
+      "componentType": 5126,
+      "count": 6770,
+      "max": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "min": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 717552,
+      "componentType": 5125,
+      "count": 19512,
+      "max": [
+        6769
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1735248,
+      "componentType": 5126,
+      "count": 49088,
       "max": [
         53.438392639160156,
-        7.796600341796875,
+        13.80538272857666,
         12.014616012573242
       ],
       "min": [
         25.348381042480469,
-        -3.1511800289154053,
+        -3.8300397396087646,
         -26.303590774536133
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 2126232,
+      "byteOffset": 2324304,
       "componentType": 5126,
-      "count": 46118,
+      "count": 49088,
       "max": [
-        0.99995577335357666,
-        0.9999396800994873,
-        0.99992084503173828
+        0.99998527765274048,
+        0.99994069337844849,
+        0.99993252754211426
       ],
       "min": [
-        -0.99996745586395264,
-        -0.99998933076858521,
+        -0.99999088048934937,
+        -0.99999350309371948,
         -0.99992406368255615
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
-      "byteOffset": 1048544,
+      "byteOffset": 1156832,
       "componentType": 5126,
-      "count": 46118,
+      "count": 49088,
       "max": [
-        0.92941176891326904,
-        0.76862746477127075,
-        0.87450981140136719,
+        1,
+        1,
+        1,
         1
       ],
       "min": [
@@ -118,11 +184,11 @@
     },
     {
       "bufferView": 0,
-      "byteOffset": 689388,
+      "byteOffset": 795600,
       "componentType": 5125,
-      "count": 116871,
+      "count": 121554,
       "max": [
-        46117
+        49087
       ],
       "min": [
         0
@@ -134,32 +200,32 @@
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
       "license": "COPYRIGHT TO idrisb",
-      "source": "https://sketchfab.com/3d-models/trees-5acc8d3be7dc43ff828a28856510c92b",
-      "title": "trees"
+      "source": "https://sketchfab.com/3d-models/trees-121940c2cd124901a15e9a8ba0884a1f",
+      "title": "Trees"
     },
-    "generator": "Sketchfab-9.24.0",
+    "generator": "Sketchfab-10.10.1-rc1",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 1156872,
+      "byteLength": 1281816,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 2679648,
-      "byteOffset": 1156872,
+      "byteLength": 2913360,
+      "byteOffset": 1281816,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 1786432,
-      "byteOffset": 3836520,
+      "byteLength": 1942240,
+      "byteOffset": 4195176,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -167,7 +233,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 5622952,
+      "byteLength": 6137416,
       "uri": "scene.bin"
     }
   ],
@@ -177,15 +243,42 @@
   "materials": [
     {
       "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
       "extensions": {
         "KHR_materials_unlit": {}
       },
-      "name": "vertexColor_shader",
+      "name": "Single_Sided_Material",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
-          1,
-          1,
-          1,
+          0.80000000000000004,
+          0.80000000000000004,
+          0.80000000000000004,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "Double_Sided_Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.80000000000000004,
+          0.80000000000000004,
+          0.80000000000000004,
           1
         ],
         "metallicFactor": 0,
@@ -195,7 +288,7 @@
   ],
   "meshes": [
     {
-      "name": "Trees_0000_vertexColor_shader_0",
+      "name": "Trees_Single Sided Material_0",
       "primitives": [
         {
           "attributes": {
@@ -210,7 +303,7 @@
       ]
     },
     {
-      "name": "Trees_0000_vertexColor_shader_0",
+      "name": "Trees_Single Sided Material_0",
       "primitives": [
         {
           "attributes": {
@@ -220,6 +313,21 @@
           },
           "indices": 7,
           "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Trees_Double Sided Material_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 10,
+            "NORMAL": 9,
+            "POSITION": 8
+          },
+          "indices": 11,
+          "material": 1,
           "mode": 4
         }
       ]
@@ -266,7 +374,7 @@
         0,
         1
       ],
-      "name": "a99c4934db8b4632ae19d312cb53979e.fbx"
+      "name": "d22f3ce42f3e49df9fec8168b53e0950.fbx"
     },
     {
       "children": [
@@ -288,24 +396,23 @@
     },
     {
       "children": [
-        7
+        7,
+        8,
+        9
       ],
       "name": "Trees"
     },
     {
-      "children": [
-        8,
-        9
-      ],
-      "name": "Trees_0000"
-    },
-    {
       "mesh": 0,
-      "name": "Trees_0000_vertexColor_shader_0"
+      "name": "Trees_Single Sided Material_0"
     },
     {
       "mesh": 1,
-      "name": "Trees_0000_vertexColor_shader_0"
+      "name": "Trees_Single Sided Material_0"
+    },
+    {
+      "mesh": 2,
+      "name": "Trees_Double Sided Material_0"
     }
   ],
   "scene": 0,
