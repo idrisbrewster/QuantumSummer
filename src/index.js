@@ -219,8 +219,6 @@ function loadGLTFs() {
       
 
       let mixer = new AnimationMixer( gltfScene );
-      
-
       let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
       activationSites.push(activationSite);
       createGeometries(position);
@@ -354,38 +352,16 @@ function createControls() {
   }
   if(params.useOrbitControls) {
     controls = new OrbitControls(camera, renderer.domElement);
-    // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
     controls = new FirstPersonControls(camera, renderer.domElement);
     controls.lookSpeed = .05;
     controls.movementSpeed = 10;
     controls.verticalMin = 1;
-    // controls = new PointerLockControls(camera, renderer.domElement);
-    // controls = new PointerLockControlsHandler(camera, document.body);
-    // scene.add(controls.controls.getObject());
   }
   if(debug) {
     window.controls = controls;
   }
-  /*
-  controls = new PointerLockControls( camera, document.body );
-  let blocker = document.getElementById( 'blocker' );
-  let instructions = document.getElementById( 'instructions' );
-
-  instructions.addEventListener( 'click', () => controls.lock(), false);
-
-  controls.addEventListener( 'lock', () => {
-    instructions.style.display = 'none';
-    blocker.style.display = 'none';
-  } );
-
-  controls.addEventListener( 'unlock', () => {
-    blocker.style.display = 'block';
-    instructions.style.display = '';
-  } );  
-  scene.add(controls.getObject());
-  */
 }
 
 
@@ -394,12 +370,7 @@ function update() {
   animationTime = clock.getDelta();
   time += 0.01;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
-  // if(controls.update){
-  //   controls.update(animationTime+.15);
-  // }
-  // if(controls.isLocked) {
   if(objectsToRaycast.length) {  
-    // controls.update(time, objectsToRaycast, scene);
     controls.update(animationTime);
     controls.object.position.y = Math.max(controls.object.position.y, 1);
   }
@@ -467,14 +438,7 @@ document.addEventListener('keydown', (evt) => {
     controls.activeLook = false;
   }
 }, false);
-// controls.addEventListener( 'lock', () => {
-//   instructions.style.display = 'none';
-//   blocker.style.display = 'none';
-// } );
-// controls.addEventListener( 'unlock', () => {
-//   instructions.style.display = 'block';
-//   blocker.style.display = '';
-// } );
+
 function hideInstructions() {
   blocker.style.display = 'none';
   instructions.style.display = 'none';
@@ -489,10 +453,6 @@ let loadPage = () => {
   instructions.removeEventListener('touch', loadPage, false);
 
   blocker.style.display = 'none';
-  if(!params.useOrbitControls) {
-    // controls.controls.lock();
-    // controls.activeLook = false;
-  }
   instructions.style.display = 'none';
 
   instructions.addEventListener('click', hideInstructions, false);
@@ -515,7 +475,5 @@ function onWindowResize() {
   
 }
 window.addEventListener("resize", onWindowResize, false);
-
-
 
 init();
