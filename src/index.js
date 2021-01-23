@@ -54,6 +54,8 @@ import {ActivationSite} from "./ActivationSite.js";
 import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
 
+
+
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
 const modelsInfo = { 
   'house': new Vector3(-27, 1, 7.3), 
@@ -64,9 +66,15 @@ const modelsInfo = {
 }
 
 const zoneColors = {
-
-  
+  'house': new Color(0x7d),
+  'island' : new Color(0x75007d),
+  'well': new Color(0xbb6ab),
+  'ships': new Color(0xb6a10b),
+  'trees': new Color(0xb33b6)
 }
+window.fogParams = fogParams
+let fogColor = new Color(fogParams.fogHorizonColor);
+
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -219,7 +227,8 @@ function loadGLTFs() {
       
 
       let mixer = new AnimationMixer( gltfScene );
-      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
+      let zoneColor = zoneColors[folderName];
+      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false, zoneColor);
       activationSites.push(activationSite);
       createGeometries(position);
       
@@ -251,7 +260,7 @@ function initGui() {
   fogFolder.addColor(fogParams, "fogHorizonColor").onChange(function() {
     scene.fog.color.set(fogParams.fogHorizonColor);
     scene.background = new Color(fogParams.fogHorizonColor);
-  });
+  }).listen();
   // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
   //   fogShader.uniforms.fogNearColor = {
   //     value: new Color(fogParams.fogNearColor)
@@ -379,8 +388,12 @@ function update() {
   let avgFreq;
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
-      
+      fogColor = fogColor.lerp(site.zoneColor, 0.1);
+      console.log(fogColor, fogColor.getHex(), site.zoneColor)
+      fogParams.fogHorizonColor = fogColor.getHex();
       avgFreq = site.audioAnalyser.getAverageFrequency();
+      scene.fog.color.set(fogParams.fogHorizonColor);
+      scene.background = new Color(fogParams.fogHorizonColor);
       // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
