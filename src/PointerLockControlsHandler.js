@@ -88,8 +88,17 @@ export class PointerLockControlsHandler {
     scene.add(this.arrow);
 
     let onObject = intersections.length > 0;
+    let flag = false;
+    intersections.forEach(el => {
+      if(el.distance < 3) {
+        flag = true;
+        // this.velocity.y += 1;
+      }
+    })
     
-    
+    if(flag) {
+      this.velocity.y += 1;
+    }
     // let time = performance.now();
     let delta = ( time - this.prevTime ) ;
 

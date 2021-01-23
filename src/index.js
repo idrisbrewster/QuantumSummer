@@ -206,6 +206,9 @@ function loadGLTFs() {
       scene.add(gltfScene);
       objectsToRaycast.push(gltfScene);
       gltfScene.traverse( function ( node ) {
+        if(node.isMesh) {
+          objectsToRaycast.push(node);
+        }
         if ( node.isMesh || node.isLight ) node.castShadow = true;
       } );
       
@@ -349,10 +352,13 @@ function createControls() {
     // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
-    // controls = new FirstPersonControls(camera, renderer.domElement);
+    controls = new FirstPersonControls(camera, renderer.domElement);
+    controls.lookSpeed = .05;
+    controls.movementSpeed = 10;
+    controls.verticalMin = 1;
     // controls = new PointerLockControls(camera, renderer.domElement);
-    controls = new PointerLockControlsHandler(camera, document.body);
-    scene.add(controls.controls.getObject());
+    // controls = new PointerLockControlsHandler(camera, document.body);
+    // scene.add(controls.controls.getObject());
   }
   if(debug) {
     window.controls = controls;
@@ -387,8 +393,10 @@ function update() {
   //   controls.update(animationTime+.15);
   // }
   // if(controls.isLocked) {
-  if(objectsToRaycast.length && controls.controls.isLocked) {  
-    controls.update(time, objectsToRaycast, scene);
+  if(objectsToRaycast.length) {  
+    // controls.update(time, objectsToRaycast, scene);
+    controls.update(animationTime);
+    controls.object.position.y = Math.max(controls.object.position.y, 1);
   }
   // }
   let sky = scene.getObjectByName('sky');
@@ -446,6 +454,12 @@ function render() {
 // we have to initialize the audio on a click action
 let instructions = document.querySelector('.instructions');
 let blocker = document.querySelector('.blocker');
+// document.addEventListener('keypress', (e) => {
+//   console.log('test')
+//     instructions.style.display = 'block';
+//     blocker.style.display = '';
+//     controls.activeLook = false;
+// }, false);
 // controls.addEventListener( 'lock', () => {
 //   instructions.style.display = 'none';
 //   blocker.style.display = 'none';
@@ -463,7 +477,8 @@ let loadPage = () => {
   instructions.removeEventListener('touch', loadPage, false);
   blocker.style.display = 'none';
   if(!params.useOrbitControls) {
-    controls.controls.lock();
+    // controls.controls.lock();
+    // controls.activeLook = false;
   }
   instructions.style.display = 'none';
 }
