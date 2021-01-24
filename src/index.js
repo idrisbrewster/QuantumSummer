@@ -53,11 +53,13 @@ import {asyncLoadAmbientAudio} from './loadAmbientAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams } from './helpers.js';
+import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams, wellShaderParams } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
+
+import {createWellShader} from './wellShader.js';
 
 
 
@@ -113,6 +115,7 @@ let audioListener;
 let objectsToRaycast;
 
 let moon;
+let wellShader;
 
 
 
@@ -139,7 +142,11 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  
+  wellShader = createWellShader(wellShaderParams);
+  // -6.975823279039201, y: 1, z: -51.60382345101434}
+  wellShader.position.set(-6.6, 1, -51.6);
+  scene.add(wellShader)
+  window.wellShader = wellShader;
   
   
   
@@ -398,6 +405,7 @@ function createGeometries(position) {
   mesh.position.set(position.x, position.y, position.z)
   scene.add(mesh);
   mesh.scale.setScalar( params.activationDistance );
+  mesh.visible = params.showActivationSites;
   activationSiteHelpers.push(mesh);
 }
 
@@ -413,6 +421,7 @@ function createControls() {
     controls.lookSpeed = .05;
     controls.movementSpeed = 10;
     controls.verticalMin = 1;
+    controls.lookAt(0, 0, 0)
   }
   if(debug) {
     window.controls = controls;
@@ -424,6 +433,7 @@ function createControls() {
 function update() {
   animationTime = clock.getDelta();
   time += 0.01;
+  wellShaderParams.time = time;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
   if(objectsToRaycast.length) {  
     controls.update(animationTime);

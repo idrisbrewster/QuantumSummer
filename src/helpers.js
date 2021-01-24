@@ -6,9 +6,13 @@ import {
 export let params = {
   activationDistance : 24.0,
   useOrbitControls: false,
-  showActivationSites: true
+  showActivationSites: false,
   // useOrbitControls: false
 };
+
+export let wellShaderParams = {
+  time: 0.0,
+}
 
 export let fogParams = {
   // 0x337d
