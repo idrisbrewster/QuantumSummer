@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family: Helvetica, sans-serif;
   margin: 0;
   overflow: hidden;
 }
@@ -44,7 +44,7 @@ body {
 
   color: #ffffff;
   text-align: center;
-  font-family: Arial;
+  font-family: Helvetica, sans-serif;
   font-size: 14px;
   line-height: 24px;
 

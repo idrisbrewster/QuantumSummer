@@ -1,26 +1,26 @@
 Arguments: 
-  /usr/local/Cellar/node/14.8.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js add stat.js
+  /usr/local/Cellar/node/14.9.0/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js add shader-park-core
 
 PATH: 
-  /var/folders/hp/t74818k1161fk6527kplvh640000gn/T/yarn--1598284500318-0.08274774801117668:/Users/torin/Documents/2020/QuantumSummer/node_modules/.bin:/Users/torin/.config/yarn/link/node_modules/.bin:/usr/local/Cellar/node/14.8.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.8.0/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.8.0/bin/node_modules/npm/bin/node-gyp-bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin
+  /var/folders/hp/t74818k1161fk6527kplvh640000gn/T/yarn--1611446653965-0.8982016405257462:/Users/torin/Documents/2020/QuantumSummer/node_modules/.bin:/Users/torin/.config/yarn/link/node_modules/.bin:/usr/local/Cellar/node/14.9.0/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.9.0/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/Cellar/node/14.9.0/bin/node_modules/npm/bin/node-gyp-bin:/usr/local/opt/python@3.8/bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/usr/local/opt/python@3.8/bin:/usr/local/opt/icu4c/sbin:/usr/local/opt/icu4c/bin
 
 Yarn version: 
-  1.22.4
+  1.22.5
 
 Node version: 
-  14.8.0
+  14.9.0
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/stat.js: Not found
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:66987:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:140748:22)
+  Error: https://registry.yarnpkg.com/shader-park-core: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:66988:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:140749:22)
       at Request.emit (events.js:314:20)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141720:10)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141721:10)
       at Request.emit (events.js:314:20)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.4/libexec/lib/cli.js:141642:12)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141643:12)
       at Object.onceWrapper (events.js:420:28)
       at IncomingMessage.emit (events.js:326:22)
       at endReadableNT (_stream_readable.js:1244:12)

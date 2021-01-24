@@ -1,0 +1,235 @@
+{
+  "accessors": [
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 12266,
+      "max": [
+        50.151760101318359,
+        -1.3974282741546631,
+        49.253070831298828
+      ],
+      "min": [
+        19.85682487487793,
+        -2.375617504119873,
+        28.951726913452148
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 147192,
+      "componentType": 5126,
+      "count": 12266,
+      "max": [
+        0.99976247549057007,
+        0.99996262788772583,
+        0.99993807077407837
+      ],
+      "min": [
+        -0.99999171495437622,
+        -0.99999666213989258,
+        -0.99972933530807495
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 12266,
+      "max": [
+        1,
+        1,
+        0.9686274528503418,
+        1
+      ],
+      "min": [
+        0.011764706112444401,
+        0.0078431377187371254,
+        0,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 40260,
+      "max": [
+        12265
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "idrisb (https://sketchfab.com/idrisb)",
+      "license": "COPYRIGHT TO idrisb",
+      "source": "https://sketchfab.com/3d-models/ships-c3c47ad3a9054528b197fc43aae5de42",
+      "title": "ships"
+    },
+    "generator": "Sketchfab-9.24.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 161040,
+      "byteOffset": 0,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 294384,
+      "byteOffset": 161040,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 196256,
+      "byteOffset": 455424,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 651680,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "vertexColor_shader",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Ships_0000_vertexColor_shader_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 2,
+            "NORMAL": 1,
+            "POSITION": 0
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "name": "RootNode (gltf orientation matrix)",
+      "rotation": [
+        -0.70710678118654746,
+        -0,
+        -0,
+        0.70710678118654757
+      ]
+    },
+    {
+      "children": [
+        2
+      ],
+      "name": "RootNode (model correction matrix)"
+    },
+    {
+      "children": [
+        3
+      ],
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "name": "001a730cab614a7ab21a22ae222221cf.fbx"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "BakedMesh"
+    },
+    {
+      "children": [
+        6
+      ],
+      "name": "Root"
+    },
+    {
+      "children": [
+        7
+      ],
+      "name": "Ships"
+    },
+    {
+      "children": [
+        8
+      ],
+      "name": "Ships_0000"
+    },
+    {
+      "mesh": 0,
+      "name": "Ships_0000_vertexColor_shader_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "OSG_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}
+

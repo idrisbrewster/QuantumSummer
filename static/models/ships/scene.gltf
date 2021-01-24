@@ -3,40 +3,105 @@
     {
       "bufferView": 1,
       "componentType": 5126,
-      "count": 12266,
+      "count": 19012,
       "max": [
-        50.151760101318359,
-        -1.3974282741546631,
-        49.253070831298828
+        51.212699890136719,
+        6.7274637222290039,
+        64.023635864257812
       ],
       "min": [
-        19.85682487487793,
-        -2.375617504119873,
-        28.951726913452148
+        -49.060310363769531,
+        -2.6762995719909668,
+        9.3078823089599609
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 1,
-      "byteOffset": 147192,
+      "byteOffset": 228144,
       "componentType": 5126,
-      "count": 12266,
+      "count": 19012,
       "max": [
-        0.99976247549057007,
-        0.99996262788772583,
-        0.99993807077407837
+        0.99922829866409302,
+        0.9999624490737915,
+        0.99925881624221802
       ],
       "min": [
-        -0.99999171495437622,
-        -0.99999666213989258,
-        -0.99972933530807495
+        -0.99966919422149658,
+        -0.99997603893280029,
+        -0.99976956844329834
       ],
       "type": "VEC3"
     },
     {
       "bufferView": 2,
       "componentType": 5126,
-      "count": 12266,
+      "count": 19012,
+      "max": [
+        0.92549020051956177,
+        0.67450982332229614,
+        0.40000000596046448,
+        1
+      ],
+      "min": [
+        0.035294119268655777,
+        0.0078431377187371254,
+        0,
+        1
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 67536,
+      "max": [
+        19011
+      ],
+      "min": [
+        0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 456288,
+      "componentType": 5126,
+      "count": 6028,
+      "max": [
+        51.249649047851562,
+        6.7008085250854492,
+        63.748561859130859
+      ],
+      "min": [
+        -48.66864013671875,
+        -2.5966243743896484,
+        9.6387310028076172
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 528624,
+      "componentType": 5126,
+      "count": 6028,
+      "max": [
+        0.99976044893264771,
+        0.9998934268951416,
+        0.99812448024749756
+      ],
+      "min": [
+        -0.99718677997589111,
+        -0.99926537275314331,
+        -0.99328082799911499
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 304192,
+      "componentType": 5126,
+      "count": 6028,
       "max": [
         1,
         1,
@@ -53,10 +118,11 @@
     },
     {
       "bufferView": 0,
+      "byteOffset": 270144,
       "componentType": 5125,
-      "count": 40260,
+      "count": 15312,
       "max": [
-        12265
+        6027
       ],
       "min": [
         0
@@ -68,32 +134,32 @@
     "extras": {
       "author": "idrisb (https://sketchfab.com/idrisb)",
       "license": "COPYRIGHT TO idrisb",
-      "source": "https://sketchfab.com/3d-models/ships-c3c47ad3a9054528b197fc43aae5de42",
-      "title": "ships"
+      "source": "https://sketchfab.com/3d-models/ships-615b9cab4d1d4cfd8ebdb4155f625efe",
+      "title": "Ships"
     },
-    "generator": "Sketchfab-9.24.0",
+    "generator": "Sketchfab-10.10.1-rc1",
     "version": "2.0"
   },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 161040,
+      "byteLength": 331392,
       "byteOffset": 0,
       "name": "floatBufferViews",
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 294384,
-      "byteOffset": 161040,
+      "byteLength": 600960,
+      "byteOffset": 331392,
       "byteStride": 12,
       "name": "floatBufferViews",
       "target": 34962
     },
     {
       "buffer": 0,
-      "byteLength": 196256,
-      "byteOffset": 455424,
+      "byteLength": 400640,
+      "byteOffset": 932352,
       "byteStride": 16,
       "name": "floatBufferViews",
       "target": 34962
@@ -101,7 +167,7 @@
   ],
   "buffers": [
     {
-      "byteLength": 651680,
+      "byteLength": 1332992,
       "uri": "scene.bin"
     }
   ],
@@ -111,15 +177,42 @@
   "materials": [
     {
       "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
       "extensions": {
         "KHR_materials_unlit": {}
       },
-      "name": "vertexColor_shader",
+      "name": "Single_Sided_Material",
       "pbrMetallicRoughness": {
         "baseColorFactor": [
-          1,
-          1,
-          1,
+          0.80000000000000004,
+          0.80000000000000004,
+          0.80000000000000004,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 1
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ],
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "Double_Sided_Material",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.80000000000000004,
+          0.80000000000000004,
+          0.80000000000000004,
           1
         ],
         "metallicFactor": 0,
@@ -129,7 +222,7 @@
   ],
   "meshes": [
     {
-      "name": "Ships_0000_vertexColor_shader_0",
+      "name": "Ships_Single Sided Material_0",
       "primitives": [
         {
           "attributes": {
@@ -139,6 +232,21 @@
           },
           "indices": 3,
           "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Ships_Double Sided Material_0",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 6,
+            "NORMAL": 5,
+            "POSITION": 4
+          },
+          "indices": 7,
+          "material": 1,
           "mode": 4
         }
       ]
@@ -185,7 +293,7 @@
         0,
         1
       ],
-      "name": "001a730cab614a7ab21a22ae222221cf.fbx"
+      "name": "5b6bd235e92f447ab96690746e0c5821.fbx"
     },
     {
       "children": [
@@ -207,19 +315,18 @@
     },
     {
       "children": [
-        7
+        7,
+        8
       ],
       "name": "Ships"
     },
     {
-      "children": [
-        8
-      ],
-      "name": "Ships_0000"
+      "mesh": 0,
+      "name": "Ships_Single Sided Material_0"
     },
     {
-      "mesh": 0,
-      "name": "Ships_0000_vertexColor_shader_0"
+      "mesh": 1,
+      "name": "Ships_Double Sided Material_0"
     }
   ],
   "scene": 0,

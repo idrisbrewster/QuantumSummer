@@ -25,7 +25,11 @@ import {
   AdditiveBlending,
   BackSide,
   Vector2,
-  FrontSide
+  FrontSide,
+  RepeatWrapping,
+  TextureLoader,
+  MirroredRepeatWrapping,
+  PointLight
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -39,19 +43,25 @@ import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
+import { PointerLockControlsHandler } from './PointerLockControlsHandler.js';
 
 // import {fogMesh, fogShader} from './fog/fog.js';
 import {initWater} from './water.js';
 
 import {asyncLoadAudio} from './loadAudio.js';
+import {asyncLoadAmbientAudio} from './loadAmbientAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams } from './helpers.js';
+import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams, wellShaderParams } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/starsfragment.glsl";
 import vertexShader from "./shaders/vertex.glsl";
+
+import {createWellShader} from './wellShader.js';
+
+
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
 const modelsInfo = { 
@@ -61,6 +71,17 @@ const modelsInfo = {
   'ships': new Vector3(32, 1, 41),
   'trees': new Vector3( 37, 4, -6.)
 }
+
+const zoneColors = {
+  'house': new Color(0x7d),
+  'island' : new Color(0x75007d),
+  'well': new Color(0xbb6ab),
+  'ships': new Color(0xb6a10b),
+  'trees': new Color(0xb33b6)
+}
+window.fogParams = fogParams
+let fogColor = new Color(fogParams.fogHorizonColor);
+
 // const modelFolderNames = ['house_old', 'island_old', 'well_old', 'ship_old', 'tree_old'];
 const modelPath = './models/';
 const audioPath = './models/audio/';
@@ -70,6 +91,11 @@ const audioTrackNames = {
   'tree' : '.ogg',
   'well' : '.ogg'
 };
+
+const ambientAudio = [
+  {path: './models/audio/ambient_waves.mp3', volume: .05},
+  {path: './models/audio/ambient_beach.mp3', volume: .1}
+];
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
@@ -86,8 +112,10 @@ let activationSiteHelpers;
 let stats;
 
 let audioListener;
+let objectsToRaycast;
 
-
+let moon;
+let wellShader;
 
 
 
@@ -97,6 +125,7 @@ function init() {
   // audioData = new Array(audioParams.fftSize).fill(1.0);
   activationSites = [];
   activationSiteHelpers = [];
+  objectsToRaycast = [];
   window.activationSite = activationSites;
   clock = new Clock(true);
 
@@ -113,16 +142,22 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
-  
+  wellShader = createWellShader(wellShaderParams);
+  // -6.975823279039201, y: 1, z: -51.60382345101434}
+  wellShader.position.set(-6.6, 1, -51.6);
+  scene.add(wellShader)
+  window.wellShader = wellShader;
   
   
   
   initGui();
   createSkyBox();
+  
   // console.log(skyFogShader)
   // scene.add(fogMesh);
   
   water = initWater();
+  objectsToRaycast.push(water);
   scene.add(water);
 
   // let pmremGenerator = new PMREMGenerator( renderer );
@@ -133,7 +168,7 @@ function init() {
   // scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
   scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
-
+  createMoon();
   renderer.setAnimationLoop(() => {
     stats.begin();
     update();
@@ -147,6 +182,9 @@ function initAudioTracks() {
   
   
   camera.add(audioListener);
+
+  ambientAudio.forEach(audio => asyncLoadAmbientAudio(audio.path, audioListener, audio.volume));
+
   for(let name of Object.keys(audioTrackNames)) {
     let fileType = audioTrackNames[name];
     let path = `${audioPath}${name}${fileType}`;
@@ -166,6 +204,38 @@ function initAudioTracks() {
   }
 }
 
+function createMoon() {
+  const geom = new SphereBufferGeometry(4, 100, 100);
+  const moonPointLight = new PointLight(0xed0a0a, 1.0);
+  let loader = new TextureLoader()
+  loader.load('./models/textures/moonNormal.jpg', ( texture ) => {
+    texture.wrapS = texture.wrapT = RepeatWrapping;
+    loader.load('./models/textures/moonBump2.png', ( texture2 ) => {
+      const mat = new MeshStandardMaterial({ color: 0xed0a0a,  normalMap: texture, roughnessMap: texture2, emissiveIntensity:10})
+      // const mat = new MeshStandardMaterial({ emissive: 0x7d0000, color: 0xffffff,  normalMap: texture,  emissiveIntensity:10, fog:scene.fog})
+      // const mat = new MeshStandardMaterial({ color: 0xed0a0a});
+      const mesh = new Mesh(geom, mat);
+      window.moon = mesh;
+
+      // mesh.position.set(250, 10, 10);
+      mesh.position.set(-60, 5, -300);
+      moonPointLight.intensity = 150;
+      moonPointLight.position.set(-40, 5, -300)
+      mesh.name = 'moon';
+      moon = mesh;
+      scene.add(mesh);
+      scene.add(moonPointLight)
+
+    });
+    
+    // console.log('loaded Texture', texture)
+    
+    
+  });
+  
+  
+}
+
 function createSkyBox() {
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
@@ -177,7 +247,7 @@ function createSkyBox() {
   const mesh = new Mesh(geometry, material);
   mesh.rotateX(Math.PI/2);
   mesh.rotateZ(Math.PI/2);
-  window.sphereGeom = mesh
+  window.sphereGeom = mesh;
   mesh.position.set(15, -300, 75);
   mesh.name = 'sky';
   scene.add(mesh);
@@ -200,15 +270,18 @@ function loadGLTFs() {
       let position = modelsInfo[folderName];
       // console.log(gltfScene, loadedObject, position);
       scene.add(gltfScene);
+      objectsToRaycast.push(gltfScene);
       gltfScene.traverse( function ( node ) {
+        if(node.isMesh) {
+          objectsToRaycast.push(node);
+        }
         if ( node.isMesh || node.isLight ) node.castShadow = true;
       } );
       
 
       let mixer = new AnimationMixer( gltfScene );
-      
-
-      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false);
+      let zoneColor = zoneColors[folderName];
+      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false, zoneColor);
       activationSites.push(activationSite);
       createGeometries(position);
       
@@ -240,7 +313,7 @@ function initGui() {
   fogFolder.addColor(fogParams, "fogHorizonColor").onChange(function() {
     scene.fog.color.set(fogParams.fogHorizonColor);
     scene.background = new Color(fogParams.fogHorizonColor);
-  });
+  }).listen();
   // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
   //   fogShader.uniforms.fogNearColor = {
   //     value: new Color(fogParams.fogNearColor)
@@ -277,7 +350,7 @@ function createLights() {
 
   const hemisphereLight = new HemisphereLight(0xddeeff, 0x202020, 3);
   // hemisphereLight.castShadow = true;
-  // scene.add(directionalLight, directionalLightHelper, hemisphereLight);
+  scene.add(hemisphereLight);
 }
 
 function createRenderer() {
@@ -304,7 +377,7 @@ function createSkyMaterial() {
     uniforms: {
       iTime: { value: 1.0 },
       iMouse: { value: new Vector2(.5, .5) },
-      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) },
+      iResolution: { value: new Vector3(container.clientWidth, container.clientHeight, 1) },
       // audio : { type: "fv1",  value: new Array(audioPath.fftSize) },
     },
     blending: AdditiveBlending,
@@ -332,6 +405,7 @@ function createGeometries(position) {
   mesh.position.set(position.x, position.y, position.z)
   scene.add(mesh);
   mesh.scale.setScalar( params.activationDistance );
+  mesh.visible = params.showActivationSites;
   activationSiteHelpers.push(mesh);
 }
 
@@ -341,33 +415,17 @@ function createControls() {
   }
   if(params.useOrbitControls) {
     controls = new OrbitControls(camera, renderer.domElement);
-    // controls.target = new Vector3(15, 0, 75);
     controls.update();
   } else {
     controls = new FirstPersonControls(camera, renderer.domElement);
-    // controls = new PointerLockControls(camera, renderer.domElement);
+    controls.lookSpeed = .05;
+    controls.movementSpeed = 10;
+    controls.verticalMin = 1;
+    controls.lookAt(0, 0, 0)
   }
   if(debug) {
     window.controls = controls;
   }
-  /*
-  controls = new PointerLockControls( camera, document.body );
-  let blocker = document.getElementById( 'blocker' );
-  let instructions = document.getElementById( 'instructions' );
-
-  instructions.addEventListener( 'click', () => controls.lock(), false);
-
-  controls.addEventListener( 'lock', () => {
-    instructions.style.display = 'none';
-    blocker.style.display = 'none';
-  } );
-
-  controls.addEventListener( 'unlock', () => {
-    blocker.style.display = 'block';
-    instructions.style.display = '';
-  } );  
-  scene.add(controls.getObject());
-  */
 }
 
 
@@ -375,16 +433,25 @@ function createControls() {
 function update() {
   animationTime = clock.getDelta();
   time += 0.01;
+  wellShaderParams.time = time;
   activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
-  if(controls.update){
-    controls.update(animationTime+.15);
+  if(objectsToRaycast.length) {  
+    controls.update(animationTime);
+    controls.object.position.y = Math.max(controls.object.position.y, 1);
   }
+  if(moon) {
+    // moon.rotateY(animationTime*.1)
+  }
+  // }
   let sky = scene.getObjectByName('sky');
   let avgFreq;
   activationSites.forEach(site => {
     if(site && site.audio && site.audio.isPlaying){
-      
+      fogColor = fogColor.lerp(site.zoneColor, 0.01);
+      fogParams.fogHorizonColor = fogColor.getHex();
       avgFreq = site.audioAnalyser.getAverageFrequency();
+      scene.fog.color.set(fogParams.fogHorizonColor);
+      scene.background = new Color(fogParams.fogHorizonColor);
       // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
@@ -434,17 +501,39 @@ function render() {
 // we have to initialize the audio on a click action
 let instructions = document.querySelector('.instructions');
 let blocker = document.querySelector('.blocker');
+document.addEventListener('keydown', (evt) => {
+  evt = evt || window.event;
+  if (evt.key === 'Escape') {
+    instructions.style.display = '-webkit-box';
+    blocker.style.display = 'block';
+    controls.activeLook = false;
+  }
+}, false);
+
+function hideInstructions() {
+  blocker.style.display = 'none';
+  instructions.style.display = 'none';
+  controls.activeLook = true;
+}
+
 console.log(instructions)
 let loadPage = () => {
   console.log('click')
   initAudioTracks();
   instructions.removeEventListener('click', loadPage, false);
   instructions.removeEventListener('touch', loadPage, false);
+
   blocker.style.display = 'none';
   instructions.style.display = 'none';
+
+  instructions.addEventListener('click', hideInstructions, false);
+  instructions.addEventListener('touch', hideInstructions, false);
+  
 }
 instructions.addEventListener('click', loadPage ,false);
 instructions.addEventListener('touch', loadPage ,false);
+
+
 
 
 function onWindowResize() {
@@ -457,6 +546,5 @@ function onWindowResize() {
   
 }
 window.addEventListener("resize", onWindowResize, false);
-
 
 init();
