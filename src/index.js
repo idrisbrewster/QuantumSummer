@@ -25,7 +25,9 @@ import {
   AdditiveBlending,
   BackSide,
   Vector2,
-  FrontSide
+  FrontSide,
+  RepeatWrapping,
+  TextureLoader
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -195,12 +197,20 @@ function initAudioTracks() {
 
 function createMoon() {
   const geometry = new SphereBufferGeometry(4, 100, 100);
-  const material = new MeshStandardMaterial({color: 0xffffff, emissive:0xff0000, emissiveIntensity: 2, fog:true})
-  const mesh = new Mesh(geometry, material)
+  let loader = new TextureLoader().load('./models/textures/moonNormal.jpg', ( texture ) => {
+    // texture.wrapS = texture.wrapT = RepeatWrapping;
+    // console.log('loaded Texture', texture)
+    
+  });
+  const mat = new MeshStandardMaterial({ emissive: 0xed0a0a, roughness: 1, metalness: 1, emissiveIntensity: 3})
+  const mesh = new Mesh(geometry, mat)
   window.moon = mesh;
+
   mesh.position.set(250, 10, 10);
+  // mesh.position.set(20, 20, 20);
   mesh.name = 'moon';
   scene.add(mesh);
+  
 }
 
 function createSkyBox() {
@@ -344,7 +354,7 @@ function createSkyMaterial() {
     uniforms: {
       iTime: { value: 1.0 },
       iMouse: { value: new Vector2(.5, .5) },
-      iResolution: { value: new THREE.Vector3(container.clientWidth, container.clientHeight, 1) },
+      iResolution: { value: new Vector3(container.clientWidth, container.clientHeight, 1) },
       // audio : { type: "fv1",  value: new Array(audioPath.fftSize) },
     },
     blending: AdditiveBlending,
