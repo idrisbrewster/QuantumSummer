@@ -27,7 +27,9 @@ import {
   Vector2,
   FrontSide,
   RepeatWrapping,
-  TextureLoader
+  TextureLoader,
+  MirroredRepeatWrapping,
+  PointLight
 } from "three";
 
 import 'regenerator-runtime/runtime'
@@ -143,7 +145,7 @@ function init() {
   
   initGui();
   createSkyBox();
-  createMoon();
+  
   // console.log(skyFogShader)
   // scene.add(fogMesh);
   
@@ -159,7 +161,7 @@ function init() {
   // scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
   scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
-
+  createMoon();
   renderer.setAnimationLoop(() => {
     stats.begin();
     update();
@@ -196,20 +198,34 @@ function initAudioTracks() {
 }
 
 function createMoon() {
-  const geometry = new SphereBufferGeometry(4, 100, 100);
-  let loader = new TextureLoader().load('./models/textures/moonNormal.jpg', ( texture ) => {
-    // texture.wrapS = texture.wrapT = RepeatWrapping;
+  const geom = new SphereBufferGeometry(4, 100, 100);
+  const moonPointLight = new PointLight(0xed0a0a, 1.0);
+  let loader = new TextureLoader()
+  loader.load('./models/textures/moonNormal.jpg', ( texture ) => {
+    texture.wrapS = texture.wrapT = RepeatWrapping;
+    loader.load('./models/textures/moonBump2.png', ( texture2 ) => {
+      const mat = new MeshStandardMaterial({ color: 0xed0a0a,  normalMap: texture, roughnessMap: texture2, emissiveIntensity:10})
+      // const mat = new MeshStandardMaterial({ emissive: 0x7d0000, color: 0xffffff,  normalMap: texture,  emissiveIntensity:10, fog:scene.fog})
+      // const mat = new MeshStandardMaterial({ color: 0xed0a0a});
+      const mesh = new Mesh(geom, mat);
+      window.moon = mesh;
+
+      // mesh.position.set(250, 10, 10);
+      mesh.position.set(-60, 5, -300);
+      moonPointLight.intensity = 150;
+      moonPointLight.position.set(-40, 5, -300)
+      mesh.name = 'moon';
+      moon = mesh;
+      scene.add(mesh);
+      scene.add(moonPointLight)
+
+    });
+    
     // console.log('loaded Texture', texture)
     
+    
   });
-  const mat = new MeshStandardMaterial({ emissive: 0xed0a0a, roughness: 1, metalness: 1, emissiveIntensity: 3})
-  const mesh = new Mesh(geometry, mat)
-  window.moon = mesh;
-
-  mesh.position.set(250, 10, 10);
-  // mesh.position.set(20, 20, 20);
-  mesh.name = 'moon';
-  scene.add(mesh);
+  
   
 }
 
@@ -327,7 +343,7 @@ function createLights() {
 
   const hemisphereLight = new HemisphereLight(0xddeeff, 0x202020, 3);
   // hemisphereLight.castShadow = true;
-  // scene.add(directionalLight, directionalLightHelper, hemisphereLight);
+  scene.add(hemisphereLight);
 }
 
 function createRenderer() {
@@ -412,6 +428,9 @@ function update() {
   if(objectsToRaycast.length) {  
     controls.update(animationTime);
     controls.object.position.y = Math.max(controls.object.position.y, 1);
+  }
+  if(moon) {
+    // moon.rotateY(animationTime*.1)
   }
   // }
   let sky = scene.getObjectByName('sky');

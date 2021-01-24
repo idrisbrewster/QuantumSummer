@@ -4,11 +4,9 @@ import {
     Audio
   } from "three";
 
-export function asyncLoadAmbientAudio(audioFile, camera, volume) {
-    const listener = new AudioListener();
-    camera.add( listener );
+const audioLoader = new AudioLoader();
+export function asyncLoadAmbientAudio(audioFile, listener, volume) {
     const sound = new Audio( listener );
-    const audioLoader = new AudioLoader();
     audioLoader.load( audioFile, ( buffer ) => {
         sound.setBuffer( buffer );
         sound.setLoop( true );
