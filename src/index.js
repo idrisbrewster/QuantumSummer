@@ -73,11 +73,11 @@ const modelsInfo = {
 }
 
 const zoneColors = {
-  'house': new Color(0x7d),
+  'house': new Color(0xf8d28b),
   'island' : new Color(0x75007d),
-  'well': new Color(0xbb6ab),
-  'ships': new Color(0xb6a10b),
-  'trees': new Color(0xb33b6)
+  'well': new Color(0x99bec5),
+  'ships': new Color(0x3b2648),
+  'trees': new Color(0x092f17)
 }
 window.fogParams = fogParams
 let fogColor = new Color(fogParams.fogHorizonColor);
@@ -354,7 +354,7 @@ function createLights() {
 }
 
 function createRenderer() {
-  renderer = new WebGLRenderer({ antialias: true });
+  renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance", stencil: false });
   if(debug) {
     window.render = renderer;
   }
