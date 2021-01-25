@@ -5,7 +5,7 @@ import {
 import { lerp } from './helpers.js';
 
 export class ActivationSite {
-  constructor(position, object, gltfScene, animationMixer, audio, autoPlayAnimation=false, zoneColor) {
+  constructor(position, object, gltfScene, animationMixer, audio, autoPlayAnimation=false, zoneColor, zoneHelper) {
     this.position = position;
     this.object = object;
     this.animationMixer = animationMixer;
@@ -20,6 +20,7 @@ export class ActivationSite {
     this.audioAnalyser = null;
     this.fftSize = 32;
     this.zoneColor = zoneColor;
+    this.zoneHelper = zoneHelper;
   }
 
   update(time, inputPosition, threshold = 10) {
