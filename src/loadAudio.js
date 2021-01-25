@@ -1,7 +1,6 @@
 import {
     PositionalAudio,
     AudioLoader,
-    Audio
   } from "three";
 
 let audioLoader = new AudioLoader();
