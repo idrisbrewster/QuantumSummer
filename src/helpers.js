@@ -18,7 +18,7 @@ export let fogParams = {
   // 0x337d
   fogNearColor: 0xfc4848,
   fogHorizonColor: 0x000000,
-  fogDensity: 0.0021,
+  fogDensity: 0.0075,
   fogNoiseSpeed: 100,
   fogNoiseFreq: .0012,
   fogNoiseImpact: .5
