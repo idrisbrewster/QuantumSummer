@@ -32,6 +32,22 @@ import {
   PointLight
 } from "three";
 
+import ParticleSystem, {
+  SpriteRenderer,
+  Emitter,
+  Rate,
+  Span,
+  Position,
+  PointZone,
+  Mass,
+  Radius,
+  Life,
+  RadialVelocity,
+  Vector3D,
+  Alpha,
+  Scale
+} from 'three-nebula';
+
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 import 'regenerator-runtime/runtime'
@@ -46,6 +62,8 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls.js';
 import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls.js';
 import { PointerLockControlsHandler } from './PointerLockControlsHandler.js';
+
+import {createEmitter} from './particles.js';
 
 // import {fogMesh, fogShader} from './fog/fog.js';
 import {initWater} from './water.js';
@@ -151,9 +169,29 @@ function init() {
   loadGLTFs();
   createCamera();
   createLights();
+  
   createRenderer();
 
   createPostProcessingPass();
+  const system = new ParticleSystem();
+  // system.addEmitter(createEmitter(camera, renderer));
+  const emitter = new Emitter(); 
+  emitter.setRate(new Rate(new Span(4, 16), new Span(0.01)))
+  .setInitializers([
+    new Position(new PointZone(0, 0)),
+    new Mass(1),
+    new Radius(6, 12),
+    new Life(3),
+    new RadialVelocity(45, new Vector3D(0, 1, 0), 180),
+  ])
+  .setBehaviours([
+    new Alpha(1, 0),
+    new Scale(0.1, 1.3),
+    new Color(new THREE.Color(), new THREE.Color()),
+  ]);
+  system.addEmitter(emitter)
+  system.addRenderer(new SpriteRenderer(scene, THREE));
+
   wellShader = createWellShader(wellShaderParams);
   // -6.975823279039201, y: 1, z: -51.60382345101434}
   wellShader.geometry.computeBoundingBox();

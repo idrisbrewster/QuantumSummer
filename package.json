@@ -16,7 +16,8 @@
     "dat.gui": "^0.7.7",
     "postprocessing": "^6.20.0",
     "stats.js": "^0.17.0",
-    "three": "0.119.1"
+    "three": "0.119.1",
+    "three-nebula": "^10.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
