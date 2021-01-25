@@ -73,11 +73,11 @@ const modelsInfo = {
 }
 
 const zoneColors = {
-  'house': new Color(0x7d),
+  'house': new Color(0xf8d28b),
   'island' : new Color(0x75007d),
-  'well': new Color(0xbb6ab),
-  'ships': new Color(0xb6a10b),
-  'trees': new Color(0xb33b6)
+  'well': new Color(0x99bec5),
+  'ships': new Color(0x3b2648),
+  'trees': new Color(0x092f17)
 }
 window.fogParams = fogParams
 let fogColor = new Color(fogParams.fogHorizonColor);
@@ -144,8 +144,17 @@ function init() {
   createRenderer();
   wellShader = createWellShader(wellShaderParams);
   // -6.975823279039201, y: 1, z: -51.60382345101434}
-  wellShader.position.set(-6.6, 1, -51.6);
+  wellShader.geometry.computeBoundingBox();
+  let offset = wellShader.geometry.boundingBox.max.y
+  
+  wellShader.position.set(-6.58, offset-1, -51.45);
+  
+  const wellCover = new THREE.CylinderBufferGeometry( 1.2, 1.2, 1, 32 );
+  const wellCoverMat = new MeshStandardMaterial({color: 0x000000});
+  const wellCoverMesh = new Mesh(wellCover, wellCoverMat);
+  wellCoverMesh.position.set(-6.58,-1.8, -51.45);
   scene.add(wellShader)
+  scene.add(wellCoverMesh)
   window.wellShader = wellShader;
   
   
@@ -338,8 +347,8 @@ function createCamera() {
   if(debug) {
     window.camera = camera;
   }
-  
-  camera.position.set(-50, 6, 105);
+  camera.position.set(-10, 3.39, -70);
+  // camera.position.set(-50, 6, 105);
 }
 
 function createLights() {
@@ -354,7 +363,7 @@ function createLights() {
 }
 
 function createRenderer() {
-  renderer = new WebGLRenderer({ antialias: true });
+  renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance", stencil: false });
   if(debug) {
     window.render = renderer;
   }
