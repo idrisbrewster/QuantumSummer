@@ -609,4 +609,4 @@ let log = `
     |__|          \\/     \\/                 \\/       \\/            \\/      \\/     \\/       
 
 `
-console.log(log)
+console.log(log);
