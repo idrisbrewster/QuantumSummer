@@ -18,14 +18,12 @@ export function createWellShader(params) {
     let start = 100.;
     
     let size = max(n1Scale * abs(sin(time*.01)), 300);
-    let size2 = max(10 * abs(sin(time*.1)), 1);
     let m = vec3(0, -1*time*8 + start, 0);
-    let n = noise(getRayDirection()*size + .2 + noise(getRayDirection()*size2) + m);
+    let n = noise(getRayDirection() * size + m);
     let col = pow(abs(n), 3);
     n = abs(n);
     color(vec3(0, 1, col)+normal*.5)
     cylinder(width, height*n);
-    
     
     difference();
     cylinder(width-offset, height);
