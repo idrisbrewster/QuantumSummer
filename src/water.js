@@ -16,7 +16,6 @@ export let initWater = () => {
       textureWidth: 512,
       textureHeight: 512,
       waterNormals: new TextureLoader().load( './models/textures/waternormals.jpg', ( texture ) => {
-        console.log('loaded texture', )
         texture.wrapS = texture.wrapT = RepeatWrapping;
       }),
       alpha: .8,
