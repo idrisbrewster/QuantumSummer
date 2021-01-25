@@ -17,7 +17,7 @@ export let wellShaderParams = {
 export let fogParams = {
   // 0x337d
   fogNearColor: 0xfc4848,
-  fogHorizonColor: 0x7d,
+  fogHorizonColor: 0x000000,
   fogDensity: 0.0021,
   fogNoiseSpeed: 100,
   fogNoiseFreq: .0012,
