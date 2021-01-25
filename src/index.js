@@ -144,8 +144,17 @@ function init() {
   createRenderer();
   wellShader = createWellShader(wellShaderParams);
   // -6.975823279039201, y: 1, z: -51.60382345101434}
-  wellShader.position.set(-6.6, 1, -51.6);
+  wellShader.geometry.computeBoundingBox();
+  let offset = wellShader.geometry.boundingBox.max.y
+  
+  wellShader.position.set(-6.58, offset-1, -51.45);
+  
+  const wellCover = new THREE.CylinderBufferGeometry( 1.2, 1.2, 1, 32 );
+  const wellCoverMat = new MeshStandardMaterial({color: 0x000000});
+  const wellCoverMesh = new Mesh(wellCover, wellCoverMat);
+  wellCoverMesh.position.set(-6.58,-1.8, -51.45);
   scene.add(wellShader)
+  scene.add(wellCoverMesh)
   window.wellShader = wellShader;
   
   
@@ -338,8 +347,8 @@ function createCamera() {
   if(debug) {
     window.camera = camera;
   }
-  
-  camera.position.set(-50, 6, 105);
+  camera.position.set(-10, 3.39, -70);
+  // camera.position.set(-50, 6, 105);
 }
 
 function createLights() {
