@@ -37,10 +37,10 @@ import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocess
 
 import 'regenerator-runtime/runtime'
 //TODO: Remove THREE import on production
-import * as THREE from 'three';
+// import * as THREE from 'three';
 import * as Stats from 'stats.js';
 
-window.THREE = THREE;
+// window.THREE = THREE;
 
 import * as dat from 'dat.gui';
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -110,7 +110,8 @@ const ambientAudio = [
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
-const debug = true;
+const debug = false;
+window.debug = debug
 let composer;
 let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
@@ -173,14 +174,14 @@ function init() {
   
   
   initGui();
+  
+  
   createSkyBox();
   
   // console.log(skyFogShader)
   // scene.add(fogMesh);
   
-  water = initWater();
-  objectsToRaycast.push(water);
-  scene.add(water);
+  
 
   // let pmremGenerator = new PMREMGenerator( renderer );
   // pmremGenerator.compileEquirectangularShader();
@@ -190,12 +191,22 @@ function init() {
   // scene.background = new Color("skyblue");
   scene.background = new Color(fogParams.fogHorizonColor);
   scene.fog = new FogExp2(fogParams.fogHorizonColor, fogParams.fogDensity);
+
+  water = initWater(scene.fog);
+  objectsToRaycast.push(water);
+  scene.add(water);
   createMoon();
   renderer.setAnimationLoop(() => {
-    stats.begin();
+    if(debug) {
+      stats.begin();
+    }
+    
     update();
     render();
-    stats.end();
+    if(debug) {
+      stats.end();
+    }
+    
   });
 }
 
@@ -215,7 +226,7 @@ function initAudioTracks() {
       audio.setRefDistance(5);
       let site = activationSites.filter(site => site.name.includes(name));
       if(site && site.length) {
-        console.log('attaching', name, 'to', site[0].name)
+        // console.log('attaching', name, 'to', site[0].name)
         site = site[0];
         site.audio = audio;
         site.audio.setVolume(0);
@@ -319,8 +330,11 @@ function loadGLTFs() {
 function initGui() {
 
   gui = new dat.GUI();
+  if(debug) {
+    document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
+  }
   window.gui = gui;
-  document.querySelector('.dg').style.zIndex = 99; //fig dat.gui hidden
+  
   gui.add(params, 'activationDistance', 0.0, 100.0).onChange(() => {
     activationSiteHelpers.forEach(mesh => mesh.scale.setScalar( params.activationDistance ));
   });
@@ -434,12 +448,6 @@ function createSkyMaterial() {
 function createActivationZoneHelpers(position, name) {
   const geometry = new SphereBufferGeometry(1, 100, 100);
   const material = new MeshBasicMaterial({transparent: true, opacity: .4, side: FrontSide});
-//   const material = new THREE.MeshPhongMaterial({
-//     color: 0xffffff,
-// //      envMap: that.textureCube,
-//     refractionRatio: 0.8
-//   });
-  // const material = createSkyMaterial();
   
   const mesh = new Mesh(geometry, material);
   mesh.position.set(position.x, position.y, position.z);
@@ -561,7 +569,6 @@ function hideInstructions() {
 }
 
 let loadPage = () => {
-  console.log('click')
   initAudioTracks();
   instructions.removeEventListener('click', loadPage, false);
   instructions.removeEventListener('touch', loadPage, false);
