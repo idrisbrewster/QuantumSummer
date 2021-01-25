@@ -32,6 +32,8 @@ import {
   PointLight
 } from "three";
 
+import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+
 import 'regenerator-runtime/runtime'
 //TODO: Remove THREE import on production
 import * as THREE from 'three';
@@ -53,7 +55,7 @@ import {asyncLoadAmbientAudio} from './loadAmbientAudio.js';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams, wellShaderParams } from './helpers.js';
+import { promisifyLoader, getGLTFPosition, lerp, fogParams, params, audioParams, waterParams, wellShaderParams, bloomOptions } from './helpers.js';
 import {ActivationSite} from "./ActivationSite.js";
 
 import fragmentShader from "./shaders/starsfragment.glsl";
@@ -108,7 +110,7 @@ const ambientAudio = [
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
 const debug = true;
-
+let composer;
 let container, scene, camera, renderer, controls, gui, clock;
 let animationTime;
 let time;
@@ -150,6 +152,8 @@ function init() {
   createCamera();
   createLights();
   createRenderer();
+
+  createPostProcessingPass();
   wellShader = createWellShader(wellShaderParams);
   // -6.975823279039201, y: 1, z: -51.60382345101434}
   wellShader.geometry.computeBoundingBox();
@@ -331,6 +335,15 @@ function initGui() {
     scene.fog.color.set(fogParams.fogHorizonColor);
     scene.background = new Color(fogParams.fogHorizonColor);
   }).listen();
+
+  // let bloomFolder = gui.addFolder('Bloom');
+  // bloomFolder.add(bloomOptions, "resolution", [240, 360, 480, 720, 1080]).onChange(function(value) {
+  //   bloom.resolution.height = Number(value)
+  // })
+  // bloomFolder.addColor(bloomOptions, "fogHorizonColor").onChange(function() {
+  //   scene.fog.color.set(bloomOptions.fogHorizonColor);
+  //   scene.background = new Color(bloomOptions.fogHorizonColor);
+  // }).listen();
   // fogFolder.addColor(fogParams, "fogNearColor").onChange(function() {
   //   fogShader.uniforms.fogNearColor = {
   //     value: new Color(fogParams.fogNearColor)
@@ -375,6 +388,7 @@ function createRenderer() {
   if(debug) {
     window.render = renderer;
   }
+
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   // renderer.shadowMap.enabled = true;
@@ -386,6 +400,12 @@ function createRenderer() {
   renderer.physicallyCorrectLights = true;
 
   container.appendChild(renderer.domElement);
+}
+
+function createPostProcessingPass() {
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new EffectPass(camera, new BloomEffect(bloomOptions)));
 }
 
 function createSkyMaterial() {
@@ -513,7 +533,9 @@ function update() {
 }
 
 function render() {
-  renderer.render(scene, camera);
+  composer.render(clock.getDelta());
+
+  // renderer.render(scene, camera);
 }
 
 // we have to initialize the audio on a click action

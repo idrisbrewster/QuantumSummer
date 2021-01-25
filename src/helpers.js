@@ -2,6 +2,11 @@ import {
   Vector3,
 } from "three";
 
+import {
+  BlendFunction,
+  KernelSize
+} from 'postprocessing'
+
 
 export let params = {
   activationDistance : 24.0,
@@ -13,6 +18,15 @@ export let params = {
 export let wellShaderParams = {
   time: 0.0,
 }
+
+export let bloomOptions = {
+  blendFunction: BlendFunction.SCREEN,
+  kernelSize: KernelSize.MEDIUM,
+  luminanceThreshold: 0.15,
+  luminanceSmoothing: 0.1,
+  height: 480,
+  intensity: .65
+};
 
 export let fogParams = {
   // 0x337d
