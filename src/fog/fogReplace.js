@@ -4,14 +4,14 @@ const fogParsVert = `
 #ifdef USE_FOG
   varying float fogDepth;
   varying vec3 vFogWorldPosition;
-  varying vec2 vUv;
+  // varying vec2 vUv;
 #endif
 `;
 
 const fogVert = `
 #ifdef USE_FOG
   fogDepth = - mvPosition.z;
-  vUv = uv;
+  // vUv = uv;
   vFogWorldPosition = (modelMatrix * vec4( transformed, 1.0 )).xyz;
   
 #endif
