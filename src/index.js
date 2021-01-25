@@ -65,11 +65,19 @@ import {createWellShader} from './wellShader.js';
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
 const modelsInfo = { 
-  'house': new Vector3(-27, 1, 7.3), 
+  'house': new Vector3(-21, 1.5, 12.), 
   'island': new Vector3(0.), 
-  'well': new Vector3(0, 1, -40), 
-  'ships': new Vector3(32, 1, 41),
-  'trees': new Vector3( 37, 4, -6.)
+  'well': new Vector3(-6.58, 1, -51.45), 
+  'ships': new Vector3(30.65, 1.17, 50.52),
+  'trees': new Vector3(37, 2.15, -6.6)
+}
+
+const activationDistances = { 
+  'house': 32,
+  'island': 0, 
+  'well': 36,
+  'ships': 30.5,
+  'trees': 27
 }
 
 const zoneColors = {
@@ -217,10 +225,10 @@ function createMoon() {
   const geom = new SphereBufferGeometry(4, 100, 100);
   const moonPointLight = new PointLight(0xed0a0a, 1.0);
   let loader = new TextureLoader()
-  loader.load('./models/textures/moonNormal.jpg', ( texture ) => {
+  loader.load('./models/textures/moonN.jpg', ( texture ) => {
     texture.wrapS = texture.wrapT = RepeatWrapping;
-    loader.load('./models/textures/moonBump2.png', ( texture2 ) => {
-      const mat = new MeshStandardMaterial({ color: 0xed0a0a,  normalMap: texture, roughnessMap: texture2, emissiveIntensity:10})
+    loader.load('./models/textures/moonB.jpg', ( texture2 ) => {
+      const mat = new MeshStandardMaterial({ color: 0xed0a0a,  normalMap: texture, roughnessMap: texture2, emissiveIntensity:10, fog:false, normalScale: new Vector2(10, 10)})
       // const mat = new MeshStandardMaterial({ emissive: 0x7d0000, color: 0xffffff,  normalMap: texture,  emissiveIntensity:10, fog:scene.fog})
       // const mat = new MeshStandardMaterial({ color: 0xed0a0a});
       const mesh = new Mesh(geom, mat);
@@ -228,7 +236,7 @@ function createMoon() {
 
       // mesh.position.set(250, 10, 10);
       mesh.position.set(-60, 5, -300);
-      moonPointLight.intensity = 150;
+      moonPointLight.intensity = 100;
       moonPointLight.position.set(-40, 5, -300)
       mesh.name = 'moon';
       moon = mesh;
@@ -292,7 +300,7 @@ function loadGLTFs() {
       let zoneColor = zoneColors[folderName];
       let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false, zoneColor);
       activationSites.push(activationSite);
-      createGeometries(position);
+      createGeometries(position, folderName);
       
     })
     .catch( (err) => console.error( err ) );
@@ -347,7 +355,7 @@ function createCamera() {
   if(debug) {
     window.camera = camera;
   }
-  camera.position.set(-10, 3.39, -70);
+  camera.position.set(-84.67, 7.57, 243.1);
   // camera.position.set(-50, 6, 105);
 }
 
@@ -400,7 +408,7 @@ function createSkyMaterial() {
   return material;
 }
 
-function createGeometries(position) {
+function createGeometries(position, name) {
   const geometry = new SphereBufferGeometry(1, 100, 100);
   const material = new MeshBasicMaterial({transparent: true, opacity: .4, side: FrontSide});
 //   const material = new THREE.MeshPhongMaterial({
@@ -411,9 +419,10 @@ function createGeometries(position) {
   // const material = createSkyMaterial();
   
   const mesh = new Mesh(geometry, material);
-  mesh.position.set(position.x, position.y, position.z)
+  mesh.position.set(position.x, position.y, position.z);
+  mesh.name = name;
   scene.add(mesh);
-  mesh.scale.setScalar( params.activationDistance );
+  mesh.scale.setScalar( activationDistances[name] );
   mesh.visible = params.showActivationSites;
   activationSiteHelpers.push(mesh);
 }
@@ -443,15 +452,11 @@ function update() {
   animationTime = clock.getDelta();
   time += 0.01;
   wellShaderParams.time = time;
-  activationSites.forEach(site => site.update(animationTime, camera.position, params.activationDistance));
+  activationSites.forEach(site => site.update(animationTime, camera.position, activationDistances[site.name]));
   if(objectsToRaycast.length) {  
     controls.update(animationTime);
     controls.object.position.y = Math.max(controls.object.position.y, 1);
   }
-  if(moon) {
-    // moon.rotateY(animationTime*.1)
-  }
-  // }
   let sky = scene.getObjectByName('sky');
   let avgFreq;
   activationSites.forEach(site => {
@@ -464,6 +469,10 @@ function update() {
       // audioData = site.audioAnalyser.getFrequencyData();
     }
   });
+
+  if(moon) {
+    moon.rotateY(-.1*animationTime)
+  }
   // console.log(waterParams.distortionScale * avgFreq/100 - 2);
   if(water) {
     water.material.uniforms.time.value += 1.0 / 60.0;
@@ -525,7 +534,6 @@ function hideInstructions() {
   controls.activeLook = true;
 }
 
-console.log(instructions)
 let loadPage = () => {
   console.log('click')
   initAudioTracks();
