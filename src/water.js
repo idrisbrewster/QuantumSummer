@@ -2,13 +2,15 @@ import {
   PlaneBufferGeometry,
   RepeatWrapping,
   Vector3,
-  TextureLoader
+  TextureLoader,
+  CircleBufferGeometry
 } from "three";
 
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { waterParams } from './helpers.js'
 export let initWater = () => {
-  let waterGeometry = new PlaneBufferGeometry( 800, 800 );
+  let waterGeometry = new CircleBufferGeometry( 350, 200 );
+  
   let water = new Water( waterGeometry,
     {
       textureWidth: 512,
