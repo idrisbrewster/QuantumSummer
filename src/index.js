@@ -29,7 +29,8 @@ import {
   RepeatWrapping,
   TextureLoader,
   MirroredRepeatWrapping,
-  PointLight
+  PointLight,
+  CylinderBufferGeometry
 } from "three";
 
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
@@ -161,7 +162,7 @@ function init() {
   
   wellShader.position.set(-6.58, offset-1, -51.45);
   
-  const wellCover = new THREE.CylinderBufferGeometry( 1.2, 1.2, 1, 32 );
+  const wellCover = new CylinderBufferGeometry( 1.2, 1.2, 1, 32 );
   const wellCoverMat = new MeshStandardMaterial({color: 0x000000});
   const wellCoverMesh = new Mesh(wellCover, wellCoverMat);
   wellCoverMesh.position.set(-6.58,-1.8, -51.45);
@@ -219,7 +220,8 @@ function initAudioTracks() {
         site.audio = audio;
         site.audio.setVolume(0);
         site.audioAnalyser = new AudioAnalyser(audio, audioParams.fftSize);
-        site.gltfScene.add(audio);
+        site.zoneHelper.add(audio);
+        // site.gltfScene.add(audio);
       }
     });
   }
@@ -302,9 +304,10 @@ function loadGLTFs() {
 
       let mixer = new AnimationMixer( gltfScene );
       let zoneColor = zoneColors[folderName];
-      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false, zoneColor);
+      let zoneHelper = createActivationZoneHelpers(position, folderName);
+      let activationSite = new ActivationSite(position,loadedObject, gltfScene, mixer, null, false, zoneColor, zoneHelper);
       activationSites.push(activationSite);
-      createGeometries(position, folderName);
+      
       
     })
     .catch( (err) => console.error( err ) );
@@ -428,7 +431,7 @@ function createSkyMaterial() {
   return material;
 }
 
-function createGeometries(position, name) {
+function createActivationZoneHelpers(position, name) {
   const geometry = new SphereBufferGeometry(1, 100, 100);
   const material = new MeshBasicMaterial({transparent: true, opacity: .4, side: FrontSide});
 //   const material = new THREE.MeshPhongMaterial({
@@ -445,6 +448,7 @@ function createGeometries(position, name) {
   mesh.scale.setScalar( activationDistances[name] );
   mesh.visible = params.showActivationSites;
   activationSiteHelpers.push(mesh);
+  return mesh;
 }
 
 function createControls() {
