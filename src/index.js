@@ -673,14 +673,21 @@ window.addEventListener('load', () => {
   let handelEnter = () => {
     hide(controlsContainer, fadeTransition);
     hide(main, fadeTransition);
+    controls.activeLook = true;
   }
 
   //ESC Key
   document.addEventListener('keydown', (evt) => {
     evt = evt || window.event;
     if (evt.key === 'Escape') {
-      disp(controlsContainer, flexFadeConst);
-      disp(main, flexFadeConst);
+
+      if(creditsContainer.style.display !== 'none') {
+        handelCloseCredits();
+      } else {
+        disp(controlsContainer, flexFadeConst);
+        disp(main, flexFadeConst);
+        controls.activeLook = false;
+      } 
     }
   }, false);
 
@@ -688,6 +695,7 @@ window.addEventListener('load', () => {
 
   //INTRO
   let introTimer;
+  controls.activeLook = false;
   disp(intro, flexFadeConst, () => {
     introTimer = setTimeout(() => {
       hide(intro, fadeTransition, () => {
@@ -697,12 +705,9 @@ window.addEventListener('load', () => {
       intro.removeEventListener('touch', handelIntroClick, false);
     }, 10000);
   });
-
-  
   
   let handelIntroClick = () => {
     clearTimeout(introTimer);
-    console.log('intro click')
     hide(intro, fadeTransition, () => {
       disp(controlsContainer, flexFadeConst);
     });
@@ -710,7 +715,6 @@ window.addEventListener('load', () => {
     intro.removeEventListener('touch', handelIntroClick, false);
   }
   
-
   intro.addEventListener('click', handelIntroClick, false);
   intro.addEventListener('touch', handelIntroClick, false);
 
