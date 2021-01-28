@@ -610,20 +610,21 @@ function onWindowResize() {
   }
 
   if(window.innerWidth < 900) {
-    [intro, controlsContainer, creditsContainer].forEach(el => {
-      if(el.style.display !== 'none') {
-        el.style.display = 'none';
-        deviceNotSupported.style.display = 'flex';
-        main.style.display = 'flex';
-        main.style.opacity = 1;
-      }
-    });
-    
-    return;
+    if(intro && controlsContainer && creditsContainer) {
+      [intro, controlsContainer, creditsContainer].forEach(el => {
+        if(el.style.display !== 'none') {
+          el.style.display = 'none';
+          deviceNotSupported.style.display = 'flex';
+          main.style.display = 'flex';
+          main.style.opacity = 1;
+        }
+      });
+    }
   } else {
-    if(deviceNotSupported.style.display !== 'none') {
+    if(deviceNotSupported.style.display !== 'none' && calledInitAudio) {
       deviceNotSupported.style.display = 'none';
       main.style.display = 'none';
+      main.style.opacity = 1;
       controls.activeLook = true;
     }
     
