@@ -8,7 +8,9 @@
   "scripts": {
     "start": "parcel index.html --open",
     "build": "parcel build index.html",
-    "gltfFix": "node ./gltfAnimationFix.js ./static/models/house2"
+    "gltfFix": "node ./gltfAnimationFix.js ./static/models/house2",
+    "cleanup": "rm -rf .cache dist",
+    "dev": "yarn run cleanup && yarn run start"
   },
   "dependencies": {
     "@gltf-transform/core": "^0.5.3",

@@ -111,7 +111,7 @@ const ambientAudio = [
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
-const debug = true;
+const debug = false;
 window.debug = debug
 let composer;
 let container, scene, camera, renderer, controls, gui, clock;
@@ -560,37 +560,39 @@ function render() {
 }
 
 // we have to initialize the audio on a click action
-let instructions = document.querySelector('.instructions');
-let blocker = document.querySelector('.blocker');
-document.addEventListener('keydown', (evt) => {
-  evt = evt || window.event;
-  if (evt.key === 'Escape') {
-    instructions.style.display = '-webkit-box';
-    blocker.style.display = 'block';
-    controls.activeLook = false;
-  }
-}, false);
+let instructions = document.querySelector('.controls-container');
+let blocker = instructions
+// let blocker = document.querySelector('.blocker');
 
-function hideInstructions() {
-  blocker.style.display = 'none';
-  instructions.style.display = 'none';
-  controls.activeLook = true;
-}
+// document.addEventListener('keydown', (evt) => {
+//   evt = evt || window.event;
+//   if (evt.key === 'Escape') {
+//     instructions.style.display = '-webkit-box';
+//     blocker.style.display = 'block';
+//     controls.activeLook = false;
+//   }
+// }, false);
+
+// function hideInstructions() {
+//   blocker.style.display = 'none';
+//   instructions.style.display = 'none';
+//   controls.activeLook = true;
+// }
 
 let loadPage = () => {
   initAudioTracks();
-  instructions.removeEventListener('click', loadPage, false);
-  instructions.removeEventListener('touch', loadPage, false);
+  // instructions.removeEventListener('click', loadPage, false);
+  // instructions.removeEventListener('touch', loadPage, false);
 
-  blocker.style.display = 'none';
-  instructions.style.display = 'none';
+  // blocker.style.display = 'none';
+  // instructions.style.display = 'none';
 
-  instructions.addEventListener('click', hideInstructions, false);
-  instructions.addEventListener('touch', hideInstructions, false);
+  // instructions.addEventListener('click', hideInstructions, false);
+  // instructions.addEventListener('touch', hideInstructions, false);
   
 }
-instructions.addEventListener('click', loadPage ,false);
-instructions.addEventListener('touch', loadPage ,false);
+// instructions.addEventListener('click', loadPage ,false);
+// instructions.addEventListener('touch', loadPage ,false);
 
 
 
@@ -619,3 +621,108 @@ let log = `
 
 `
 console.log(log);
+
+
+window.addEventListener('load', () => {
+  const intro = document.querySelector('.intro');
+  const controlsContainer = document.querySelector('.controls-container');
+  const enterButton = document.querySelector('.enter-button');
+  
+
+  const creditsContainer = document.querySelector('.credits-container');
+  const creditsButton = document.querySelector('.credits-button');
+  const closeCredits = document.querySelector('.close-credits');
+  const main = document.querySelector('.main');
+
+  const flexFadeConst = 40;
+  const fadeTransition = 1000;
+
+
+  let disp = (obj, fadeDuration, next) => {
+
+    obj.style.display = 'flex';
+    setTimeout(() => {
+      obj.style.opacity = '1';  
+      if(next) next();
+    }, fadeDuration);
+  }
+
+  let hide = (obj, fadeDuration, next) => {
+    obj.style.opacity = 0;
+    setTimeout(() => {
+      obj.style.display = 'none';
+      if(next) next();
+    }, fadeDuration);
+  }
+
+
+
+
+  let handelDisplayCredits = () => {
+    hide(controlsContainer, fadeTransition, () => {
+      disp(creditsContainer, flexFadeConst);
+    });
+  }
+
+  let handelCloseCredits = () => {
+    hide(creditsContainer, fadeTransition, () => {
+      disp(controlsContainer, flexFadeConst);
+    });
+  }
+
+  let handelEnter = () => {
+    hide(controlsContainer, fadeTransition);
+    hide(main, fadeTransition);
+  }
+
+  //ESC Key
+  document.addEventListener('keydown', (evt) => {
+    evt = evt || window.event;
+    if (evt.key === 'Escape') {
+      disp(controlsContainer, flexFadeConst);
+      disp(main, flexFadeConst);
+    }
+  }, false);
+
+  
+
+  //INTRO
+  let introTimer;
+  disp(intro, flexFadeConst, () => {
+    introTimer = setTimeout(() => {
+      hide(intro, fadeTransition, () => {
+        disp(controlsContainer, flexFadeConst);
+      });
+      intro.removeEventListener('click', handelIntroClick, false);
+      intro.removeEventListener('touch', handelIntroClick, false);
+    }, 10000);
+  });
+
+  
+  
+  let handelIntroClick = () => {
+    clearTimeout(introTimer);
+    console.log('intro click')
+    hide(intro, fadeTransition, () => {
+      disp(controlsContainer, flexFadeConst);
+    });
+    intro.removeEventListener('click', handelIntroClick, false);
+    intro.removeEventListener('touch', handelIntroClick, false);
+  }
+  
+
+  intro.addEventListener('click', handelIntroClick, false);
+  intro.addEventListener('touch', handelIntroClick, false);
+
+  creditsButton.addEventListener('click', handelDisplayCredits, false);
+  creditsButton.addEventListener('touch', handelDisplayCredits, false);
+
+  closeCredits.addEventListener('click', handelCloseCredits, false);
+  closeCredits.addEventListener('touch', handelCloseCredits, false);
+
+
+  enterButton.addEventListener('click', handelEnter, false);
+  enterButton.addEventListener('touch', handelEnter, false);
+
+
+}, false);
