@@ -211,8 +211,11 @@ function init() {
     
   });
 }
-
+let calledInitAudio = false;
 function initAudioTracks() {
+  if(calledInitAudio) {
+    return;
+  }
   audioListener = new AudioListener();
   
   
@@ -238,6 +241,7 @@ function initAudioTracks() {
       }
     });
   }
+  calledInitAudio = true;
 }
 
 function createMoon() {
@@ -345,7 +349,7 @@ function initGui() {
   });
   gui.add(params, 'useOrbitControls').onChange(() => {
     createControls();
-  });
+  }).listen();
   let fogFolder = gui.addFolder('Fog');
   fogFolder.add(fogParams, "fogDensity", 0, 0.01).onChange(function() {
     scene.fog.density = fogParams.fogDensity;
@@ -580,7 +584,7 @@ let blocker = instructions
 // }
 
 let loadPage = () => {
-  initAudioTracks();
+  // initAudioTracks();
   // instructions.removeEventListener('click', loadPage, false);
   // instructions.removeEventListener('touch', loadPage, false);
 
@@ -595,7 +599,7 @@ let loadPage = () => {
 // instructions.addEventListener('touch', loadPage ,false);
 
 
-
+let intro, controlsContainer, creditsContainer, deviceNotSupported, main;
 
 function onWindowResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
@@ -603,6 +607,27 @@ function onWindowResize() {
   renderer.setSize(container.clientWidth, container.clientHeight);
   if(controls.handleResize) {
     controls.handleResize();
+  }
+
+  if(window.innerWidth < 900) {
+    [intro, controlsContainer, creditsContainer].forEach(el => {
+      if(el.style.display !== 'none') {
+        el.style.display = 'none';
+        deviceNotSupported.style.display = 'flex';
+        main.style.display = 'flex';
+        main.style.opacity = 1;
+      }
+    });
+    
+    return;
+  } else {
+    if(deviceNotSupported.style.display !== 'none') {
+      deviceNotSupported.style.display = 'none';
+      main.style.display = 'none';
+      controls.activeLook = true;
+    }
+    
+    
   }
   
 }
@@ -624,18 +649,29 @@ console.log(log);
 
 
 window.addEventListener('load', () => {
-  const intro = document.querySelector('.intro');
-  const controlsContainer = document.querySelector('.controls-container');
+  intro = document.querySelector('.intro');
+  controlsContainer = document.querySelector('.controls-container');
   const enterButton = document.querySelector('.enter-button');
   
 
-  const creditsContainer = document.querySelector('.credits-container');
+  creditsContainer = document.querySelector('.credits-container');
   const creditsButton = document.querySelector('.credits-button');
   const closeCredits = document.querySelector('.close-credits');
-  const main = document.querySelector('.main');
+  main = document.querySelector('.main');
+
+  deviceNotSupported = document.querySelector('.device-not-supported');
+
+  
+
 
   const flexFadeConst = 40;
   const fadeTransition = 1000;
+
+  if(window.innerWidth < 900) {
+    [intro, controlsContainer, creditsContainer].forEach(el => el.style.display = 'none')
+    deviceNotSupported.style.display = 'flex';
+    return;
+  }
 
 
   let disp = (obj, fadeDuration, next) => {
@@ -671,6 +707,7 @@ window.addEventListener('load', () => {
   }
 
   let handelEnter = () => {
+    initAudioTracks();
     hide(controlsContainer, fadeTransition);
     hide(main, fadeTransition);
     controls.activeLook = true;
@@ -693,6 +730,8 @@ window.addEventListener('load', () => {
 
   
 
+  
+
   //INTRO
   let introTimer;
   controls.activeLook = false;
@@ -707,6 +746,7 @@ window.addEventListener('load', () => {
   });
   
   let handelIntroClick = () => {
+    initAudioTracks();
     clearTimeout(introTimer);
     hide(intro, fadeTransition, () => {
       disp(controlsContainer, flexFadeConst);

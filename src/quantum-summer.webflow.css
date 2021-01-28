@@ -216,7 +216,6 @@ a:hover {
   text-align: center;
 }
 
-
 .enter-button:hover {
   border-bottom-color: #fff;
   box-shadow: 0 -4px 10px 0 #fff;
@@ -322,6 +321,14 @@ a:hover {
     display: -ms-flexbox;
     display: flex;
     width: 90vw;
+  }
+
+  .container-center-align.controls-container {
+    display: none;
+  }
+
+  .container-center-align.credits-container {
+    display: none;
   }
 }
 
