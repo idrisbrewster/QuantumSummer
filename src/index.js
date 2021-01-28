@@ -67,8 +67,9 @@ import {createWellShader} from './wellShader.js';
 
 
 // const modelFolderNames = ['house2', 'island1', 'well2', 'ship2', 'tree2'];
+
 const modelsInfo = { 
-  'house': new Vector3(-21, 1.5, 12.), 
+  'house': new Vector3(-39, 1.5, 18.), 
   'island': new Vector3(0.), 
   'well': new Vector3(-6.58, 1, -51.45), 
   'ships': new Vector3(30.65, 1.17, 50.52),
@@ -76,7 +77,7 @@ const modelsInfo = {
 }
 
 const activationDistances = { 
-  'house': 32,
+  'house': 39,
   'island': 0, 
   'well': 36,
   'ships': 30.5,
@@ -110,7 +111,7 @@ const ambientAudio = [
 // const audioTrackNames = ['house.wav', 'ship.wav', 'tree.mp3', 'well.wav'];
 const GLTFPromiseLoader = promisifyLoader( new GLTFLoader() );
 
-const debug = false;
+const debug = true;
 window.debug = debug
 let composer;
 let container, scene, camera, renderer, controls, gui, clock;
@@ -196,6 +197,7 @@ function init() {
   objectsToRaycast.push(water);
   scene.add(water);
   createMoon();
+  // initAudioTracks();
   renderer.setAnimationLoop(() => {
     if(debug) {
       stats.begin();
@@ -517,8 +519,15 @@ function update() {
     
     water.material.uniforms.size.value = waterParams.size;
   }
+
+
   
-  
+  if(wellShader) {
+    if(avgFreq) {
+      wellShaderParams.audio -= Math.abs(avgFreq) / 400
+    }
+  }
+
   if(sky) {
     let mouse = sky.material.uniforms.iMouse.value;
     sky.material.uniforms.iTime.value = time;

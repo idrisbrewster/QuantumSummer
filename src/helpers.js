@@ -17,6 +17,7 @@ export let params = {
 
 export let wellShaderParams = {
   time: 0.0,
+  audio: 0.0
 }
 
 export let bloomOptions = {

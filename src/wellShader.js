@@ -10,12 +10,13 @@ export function createWellShader(params) {
     let n1Scale = 300;
     let width = .1;
     let coneAngle = .1;
+    let audio = input(.01);
     setStepSize(.99);
         
     let size = max(n1Scale * abs(sin(time*.01)), 2800);
     let s = getSpace();
     
-    let movement = vec3(cos(time * .1) * 3, -1 * time * 5, sin(time * .1) * 3);
+    let movement = vec3(cos(time * .1) * 3, -1 * time * 5 + audio, sin(time * .1) * 3);
     let n = noise(getRayDirection() * size * .1 + movement);
     let baseCol = vec3(153/255, 190/255, 197/255);
     let col = pow(n, 2) + baseCol;
@@ -28,6 +29,7 @@ export function createWellShader(params) {
     const geometry = new CylinderBufferGeometry( 8, .88, 40, 32 );
     const mesh = createSculptureWithGeometry(geometry, spCode, () => ({
         'time': params.time,
+        'audio' : params.audio
     }));
     return mesh;
 }
